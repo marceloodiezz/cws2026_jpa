@@ -6,35 +6,51 @@ import uo.ri.cws.domain.types.Money;
 import uo.ri.util.assertion.ArgumentChecks;
 
 /**
- * A substitution is a relation between an intervention and a spare part. 
- * It represents the fact that a spare part has been used in an intervention.
+ * A substitution is a relation between an intervention and a spare part. It
+ * represents the fact that a spare part has been used in an intervention.
  * 
- * Internal aggregate class of WorkOrder. Only Intervention can create Substitutions (through WorkOrder).
+ * Internal aggregate class of WorkOrder. Only Intervention can create
+ * Substitutions (through WorkOrder).
  */
 public class Substitution {
+
 	// Natural attributes
-    private Money price;
+	private Money price;
 	private int quantity;
 
 	// Accidental attributes
 	private SparePart sparePart;
 	private Intervention intervention;
-    
 
 	// ---------------------------- Constructors -----------------------------
 	/**
-	 * Package-private constructor to create a new Substitution with the given parameters.
-	 * Only Intervention can create Substitutions.
+	 * Package-private constructor to create a new Substitution with the given
+	 * parameters. Only Intervention can create Substitutions.
 	 */
 	/* package */ Substitution(SparePart sparePart, Intervention intervention, int quantity) {
 		// Validate input parameters
 		// assignations
 		// link the substitution with the intervention and spare part (atomiclink)
-		throw new UnsupportedOperationException("Not implemented yet");
+		ArgumentChecks.isNotNull(sparePart, "Spare part cannot be null");
+		ArgumentChecks.isNotNull(intervention, "Intervention cannot be null");
+		ArgumentChecks.isTrue(quantity >= 0, "Quantity must be positive");
+
+		this.sparePart = sparePart;
+		this.intervention = intervention;
+		this.quantity = quantity;
 	}
 
-	// ---------------------------- Association helpers -----------------------------
-	
+	// ---------------------------- Association helpers
+	// -----------------------------
+
+	public Money getPrice() {
+		return price;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
 	void _setSparePart(SparePart sparePart) {
 		this.sparePart = sparePart;
 	}
@@ -43,9 +59,39 @@ public class Substitution {
 		this.intervention = intervention;
 	}
 
+	public SparePart getSparePart() {
+		return sparePart;
+	}
+
+	public Intervention getIntervention() {
+		return intervention;
+	}
+
 	// ---------------------------- Business methods -----------------------------
 	public Money getTotalAmount() {
 		throw new UnsupportedOperationException("Not implemented yet");
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(intervention, sparePart);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Substitution other = (Substitution) obj;
+		return Objects.equals(intervention, other.intervention) && Objects.equals(sparePart, other.sparePart);
+	}
+
+	@Override
+	public String toString() {
+		return "Substitution [price=" + price + ", quantity=" + quantity + "]";
 	}
 
 }

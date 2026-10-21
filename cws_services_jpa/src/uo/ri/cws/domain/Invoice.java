@@ -26,22 +26,25 @@ public class Invoice {
 	private InvoiceState state = InvoiceState.ISSUED;
 
 	/*
-	 * Subtotal amount of the invoice, before applying VAT. This represents the taxable base.
+	 * Subtotal amount of the invoice, before applying VAT. This represents the
+	 * taxable base.
 	 */
-	private Money subtotal = Money.ZERO;  // cents
+	private Money subtotal = Money.ZERO; // cents
 
 	/*
 	 * VAT rate applied to the invoice, expressed as a percentage. Example: 21% VAT.
 	 */
-	private Percentage vatRate = Percentage.ofPercent(21);  // default to 21%
+	private Percentage vatRate = Percentage.ofPercent(21); // default to 21%
 
 	/*
-	 * VAT amount calculated from the subtotal amount. This is the tax the customer must pay.
+	 * VAT amount calculated from the subtotal amount. This is the tax the customer
+	 * must pay.
 	 */
-	private Money vatAmount = Money.ZERO;  // cents
+	private Money vatAmount = Money.ZERO; // cents
 
 	/*
-	 * Total amount of the invoice including VAT. This is the final amount the customer must pay.
+	 * Total amount of the invoice including VAT. This is the final amount the
+	 * customer must pay.
 	 */
 	private Money total = Money.ZERO; // cents
 
@@ -50,15 +53,13 @@ public class Invoice {
 	private Set<Charge> charges = new HashSet<>();
 
 	// ----------------- Constructors -------------------------------------
-	
+
 	public Invoice(long number) {
-		// call full constructor with sensible defaults
-		throw new UnsupportedOperationException("Not implemented yet");
+		this(number, LocalDate.now(), List.of());
 	}
 
 	public Invoice(long number, LocalDate date) {
-		// call full constructor with sensible defaults
-		throw new UnsupportedOperationException("Not implemented yet");
+		this(number, date, List.of());
 	}
 
 	public Invoice(long number, List<WorkOrder> workOrders) {
@@ -69,7 +70,13 @@ public class Invoice {
 		// check arguments (always), through IllegalArgumentException
 		// store the number
 		// add every work order calling addWorkOrder( w )
-		throw new UnsupportedOperationException("Not implemented yet");
+		ArgumentChecks.isTrue(number >= 0, "Invoice number must be positive");
+		ArgumentChecks.isNotNull(date, "Invoice date cannot be null");
+		ArgumentChecks.isNotNull(workOrders, "Work orders list cannot be null");
+
+		this.number = number;
+		this.date = date;
+		workOrders.forEach(this::addWorkOrder);
 	}
 
 	// ---- Getters ----
@@ -81,8 +88,9 @@ public class Invoice {
 		return new HashSet<>(charges);
 	}
 
-	// ------------------ Association helpers (package-private) --------------------------
-	
+	// ------------------ Association helpers (package-private)
+	// --------------------------
+
 	Set<WorkOrder> _getWorkOrders() {
 		return workOrders;
 	}
@@ -92,22 +100,25 @@ public class Invoice {
 	}
 
 	// ---- Business methods --------------------------------------------
-	
+
 	/**
-	 * Adds a work order to the invoice. The work order must be approved and the invoice must not be settled.
+	 * Adds a work order to the invoice. The work order must be approved and the
+	 * invoice must not be settled.
+	 * 
 	 * @param workOrder
 	 */
 	public void addWorkOrder(WorkOrder workOrder) {
 		// Validations
-		// links the work order 
+		// links the work order
 		// compute the invoice amount after adding the work order
 		// marks it as invoiced
-		
+
 		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	/**
 	 * Removes a work order from the invoice. The invoice must not be settled.
+	 * 
 	 * @param workOrder
 	 */
 	public void removeWorkOrder(WorkOrder workOrder) {
@@ -119,15 +130,19 @@ public class Invoice {
 	}
 
 	/**
-	 * Settles the invoice by charging the specified payment means with the requested amounts.
-	 * The total of the charges must equal the invoice total, and each payment mean must be able to be charged.
-	 * @param requestedCharges A map of payment means and their corresponding amounts to charge.
+	 * Settles the invoice by charging the specified payment means with the
+	 * requested amounts. The total of the charges must equal the invoice total, and
+	 * each payment mean must be able to be charged.
+	 * 
+	 * @param requestedCharges A map of payment means and their corresponding
+	 *                         amounts to charge.
 	 */
 	public void settle(Map<PaymentMean, Money> requestedCharges) {
 		// Validations
 		// Normalize the requested charges (round to cents, check positive)
 		// Check that the total of requested charges equals the invoice total
-		// For each payment mean, create a Charge and link it to the invoice and payment mean
+		// For each payment mean, create a Charge and link it to the invoice and payment
+		// mean
 		// Set the invoice state to PAID
 
 		throw new UnsupportedOperationException("Not implemented yet");
@@ -142,13 +157,12 @@ public class Invoice {
 
 	// ---- Calculation ----
 	private void computeAmount() {
-	    // 1. Sum all work order totals = subtotal
-	    // 2. Determine VAT rate based on invoice date
-	    // 3. Compute VAT amount
-	    // 4. Compute total amount (subtotal + VAT) rounded to cents
+		// 1. Sum all work order totals = subtotal
+		// 2. Determine VAT rate based on invoice date
+		// 3. Compute VAT amount
+		// 4. Compute total amount (subtotal + VAT) rounded to cents
 		throw new UnsupportedOperationException("Not implemented yet");
 	}
-
 
 	private Percentage getApplicableVatRate() {
 		return date.isAfter(JULY_1_2012) ? Percentage.ofPercent(21) : Percentage.ofPercent(18);
@@ -170,6 +184,40 @@ public class Invoice {
 		Money.MoneyCalculator calculator = Money.calc();
 		requestedCharges.values().forEach(calculator::add);
 		return calculator.toMoneyRoundedToCents();
+	}
+
+	public long getNumber() {
+		return number;
+	}
+
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public InvoiceState getState() {
+		return state;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(date, Long.valueOf(number), state);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Invoice other = (Invoice) obj;
+		return Objects.equals(date, other.date) && number == other.number && state == other.state;
+	}
+
+	@Override
+	public String toString() {
+		return "Invoice [number=" + number + ", date=" + date + ", state=" + state + "]";
 	}
 
 }

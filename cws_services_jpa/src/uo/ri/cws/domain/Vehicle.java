@@ -14,22 +14,91 @@ public class Vehicle {
 	private LicensePlate licensePlate;
 	private String make;
 	private String model;
-	
+
 	// Accidental attributes
 	private VehicleType vehicleType;
+	private Client client;
+	private Set<WorkOrder> workOrders = new HashSet<>();
 
 	// ---- Constructors ----
 
 	public Vehicle(LicensePlate plateNumber) {
-		// Delegate to the other constructor with meaningful default values for make and model
-		throw new UnsupportedOperationException("Not implemented yet");
+		// Delegate to the other constructor with meaningful default values for make and
+		// model
+		this(plateNumber, "no-make", "no-model");
 	}
 
 	public Vehicle(LicensePlate plateNumber, String make, String model) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		ArgumentChecks.isNotNull(plateNumber, "plate number cannot be null");
+		ArgumentChecks.isNotBlank(make, "make cannot be null or blank");
+		ArgumentChecks.isNotBlank(model, "model cannot be null or blank");
+
+		this.licensePlate = plateNumber;
+		this.make = make;
+		this.model = model;
 	}
 
 	public Money getPricePerHour() {
 		return vehicleType.getPricePerHour(); // VehicleType must return Money
 	}
+
+	public LicensePlate getLicensePlate() {
+		return licensePlate;
+	}
+
+	public String getMake() {
+		return make;
+	}
+
+	public String getModel() {
+		return model;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	void _setClient(Client client) {
+		this.client = client;
+	}
+
+	public VehicleType getVehicleType() {
+		return vehicleType;
+	}
+
+	void _setVehicleType(VehicleType vehicleType) {
+		this.vehicleType = vehicleType;
+	}
+
+	public Set<WorkOrder> getWorkOrders() {
+		return new HashSet<>(workOrders);
+	}
+
+	Set<WorkOrder> _getWorkOrders() {
+		return workOrders;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(licensePlate, make, model);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Vehicle other = (Vehicle) obj;
+		return Objects.equals(licensePlate, other.licensePlate) && Objects.equals(make, other.make)
+				&& Objects.equals(model, other.model);
+	}
+
+	@Override
+	public String toString() {
+		return "Vehicle [licensePlate=" + licensePlate + ", make=" + make + ", model=" + model + "]";
+	}
+
 }

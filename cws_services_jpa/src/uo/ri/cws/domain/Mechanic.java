@@ -16,14 +16,19 @@ public class Mechanic {
 
 	// Accidental attributes
 	private Set<WorkOrder> assigned = new HashSet<>();
-	
+
 	public Mechanic(Nif nif) {
-		// Delegate to the other constructor with meaningful default values for the fullname
-		throw new UnsupportedOperationException("Not implemented yet");
+		// Delegate to the other constructor with meaningful default values for the
+		// fullname
+		this(nif, new FullName("No name", "No surname"));
 	}
 
 	public Mechanic(Nif nif, FullName name) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		ArgumentChecks.isNotNull(nif);
+		ArgumentChecks.isNotNull(name);
+
+		this.nif = nif;
+		this.fullName = name;
 	}
 
 	// ---- Setters (optional, controlled) ----
@@ -32,16 +37,50 @@ public class Mechanic {
 		ArgumentChecks.isNotNull(name);
 		this.fullName = name;
 	}
-	
+
 	public void setNif(Nif nif) {
 		ArgumentChecks.isNotNull(nif);
-		this.nif = nif;		
+		this.nif = nif;
 	}
 
 	// ---- Associations helpers ----
 
 	Set<WorkOrder> _getAssigned() {
 		return assigned;
+	}
+
+	public Set<WorkOrder> getAssigned() {
+		return new HashSet<>(assigned);
+	}
+
+	public Nif getNif() {
+		return nif;
+	}
+
+	public FullName getFullName() {
+		return fullName;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(fullName, nif);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Mechanic other = (Mechanic) obj;
+		return Objects.equals(fullName, other.fullName) && Objects.equals(nif, other.nif);
+	}
+
+	@Override
+	public String toString() {
+		return "Mechanic [nif=" + nif + ", fullName=" + fullName + "]";
 	}
 
 }

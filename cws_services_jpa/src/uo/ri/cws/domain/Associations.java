@@ -8,11 +8,30 @@ public class Associations {
 	public static class Owns {
 
 		public static void link(Client client, Vehicle vehicle) {
-			throw new UnsupportedOperationException("Not implemented yet");
+			ArgumentChecks.isNotNull(client);
+			ArgumentChecks.isNotNull(vehicle);
+
+			StateChecks.isTrue(vehicle.getClient() == null, "Vehicle already has a client");
+			StateChecks.isFalse(client._getVehicles().contains(vehicle), "Client already has this vehicle");
+
+			// El orden importa!!!
+			vehicle._setClient(client);
+			client._getVehicles().add(vehicle);
+
 		}
 
 		public static void unlink(Vehicle vehicle) {
-			throw new UnsupportedOperationException("Not implemented yet");
+			ArgumentChecks.isNotNull(vehicle);
+
+			Client client = vehicle.getClient();
+
+			StateChecks.isTrue(client != null, "Vehicle has no client");
+			StateChecks.isTrue(client._getVehicles().contains(vehicle), "Client does not have this vehicle");
+
+			// El orden importa!!!
+			client._getVehicles().remove(vehicle);
+			vehicle._setClient(null);
+
 		}
 	}
 
@@ -21,17 +40,21 @@ public class Associations {
 		public static void link(VehicleType vehicleType, Vehicle vehicle) {
 			ArgumentChecks.isNotNull(vehicleType);
 			ArgumentChecks.isNotNull(vehicle);
+
 			StateChecks.isTrue(vehicle.getVehicleType() == null, "Vehicle already has a vehicle type");
 
-			throw new UnsupportedOperationException("Not implemented yet");
+			vehicle._setVehicleType(vehicleType);
+
 		}
 
 		public static void unlink(Vehicle vehicle) {
 			ArgumentChecks.isNotNull(vehicle);
+
 			VehicleType vehicleType = vehicle.getVehicleType();
+
 			StateChecks.isTrue(vehicleType != null, "Vehicle has no vehicle type");
 
-			throw new UnsupportedOperationException("Not implemented yet");
+			vehicle._setVehicleType(null);
 		}
 	}
 
@@ -41,7 +64,8 @@ public class Associations {
 			ArgumentChecks.isNotNull(client);
 			ArgumentChecks.isNotNull(paymentMean);
 			StateChecks.isTrue(paymentMean.getClient() == null, "Payment mean already has a client");
-			StateChecks.isFalse(client._getPaymentMeans().contains(paymentMean), "Client already has this payment mean");
+			StateChecks.isFalse(client._getPaymentMeans().contains(paymentMean),
+					"Client already has this payment mean");
 
 			throw new UnsupportedOperationException("Not implemented yet");
 		}
@@ -50,7 +74,8 @@ public class Associations {
 			ArgumentChecks.isNotNull(paymentMean);
 			Client client = paymentMean.getClient();
 			StateChecks.isTrue(client != null, "Payment mean has no client");
-			StateChecks.isTrue(client._getPaymentMeans().contains(paymentMean), "Client does not have this payment mean");
+			StateChecks.isTrue(client._getPaymentMeans().contains(paymentMean),
+					"Client does not have this payment mean");
 
 			throw new UnsupportedOperationException("Not implemented yet");
 		}
@@ -59,37 +84,62 @@ public class Associations {
 	public static class Fixes {
 
 		/* package */ static void link(Vehicle vehicle, WorkOrder workOrder) {
-			throw new UnsupportedOperationException("Not implemented yet");
+			ArgumentChecks.isNotNull(vehicle);
+			ArgumentChecks.isNotNull(workOrder);
+
+			StateChecks.isTrue(workOrder.getVehicle() == null, "WorkOrder already has a vehicle");
+			StateChecks.isFalse(vehicle._getWorkOrders().contains(workOrder), "Vehicle already has this workorder");
+
+			workOrder._setVehicle(vehicle);
+			vehicle._getWorkOrders().add(workOrder);
 		}
 
 		public static void unlink(WorkOrder workOrder) {
-			throw new UnsupportedOperationException("Not implemented yet");
+			ArgumentChecks.isNotNull(workOrder);
+
+			Vehicle vehicle = workOrder.getVehicle();
+			StateChecks.isTrue(vehicle != null, "WorkOrder has no vehicle");
+			StateChecks.isTrue(vehicle._getWorkOrders().contains(workOrder), "Vehicle does not have this workorder");
+
+			vehicle._getWorkOrders().remove(workOrder);
+			workOrder._setVehicle(null);
 		}
 	}
 
 	public static class Bills {
 
 		/* package */ static void link(Invoice invoice, WorkOrder workOrder) {
-			throw new UnsupportedOperationException("Not implemented yet");
+			ArgumentChecks.isNotNull(invoice);
+			ArgumentChecks.isNotNull(workOrder);
+
+			StateChecks.isTrue(workOrder.getInvoice() == null, "WorkOrder already has an invoice");
+			StateChecks.isFalse(invoice._getWorkOrders().contains(workOrder), "Invoice already has this workorder");
+
+			workOrder._setInvoice(invoice);
+			invoice._getWorkOrders().add(workOrder);
 		}
 
 		/* package */ static void unlink(WorkOrder workOrder) {
-			throw new UnsupportedOperationException("Not implemented yet");
+			ArgumentChecks.isNotNull(workOrder);
+
+			Invoice invoice = workOrder.getInvoice();
+			StateChecks.isTrue(invoice != null, "WorkOrder has no invoice");
+			StateChecks.isTrue(invoice._getWorkOrders().contains(workOrder), "Invoice does not have this workorder");
+
+			invoice._getWorkOrders().remove(workOrder);
+			workOrder._setInvoice(null);
 		}
 	}
 
 	/**
-	 * Atomically manages the settles and withdraws associations of a Charge.
-	 * All identity ends are set before adding to, and cleared after removing from,
-	 * the inverse collection.
+	 * Atomically manages the settles and withdraws associations of a Charge. All
+	 * identity ends are set before adding to, and cleared after removing from, the
+	 * inverse collection.
 	 */
 	public static class SettlesWithdraws {
 
-		/* package */ static void atomicLink(
-				Invoice invoice,
-				Charge charge,
-				PaymentMean paymentMean) {
-			
+		/* package */ static void atomicLink(Invoice invoice, Charge charge, PaymentMean paymentMean) {
+
 			ArgumentChecks.isNotNull(invoice);
 			ArgumentChecks.isNotNull(charge);
 			ArgumentChecks.isNotNull(paymentMean);
@@ -139,24 +189,25 @@ public class Associations {
 	}
 
 	/**
-	 * Atomically manages the records and intervenes associations of an Intervention.
-	 * All identity ends are set before adding to, and cleared after removing from,
-	 * the inverse collection.
+	 * Atomically manages the records and intervenes associations of an
+	 * Intervention. All identity ends are set before adding to, and cleared after
+	 * removing from, the inverse collection.
 	 */
 	public static class RecordsIntervenes {
 
-		/* package */ static void atomicLink(
-				WorkOrder workOrder,
-				Intervention intervention,
-				Mechanic mechanic) {
+		/* package */ static void atomicLink(WorkOrder workOrder, Intervention intervention, Mechanic mechanic) {
 			ArgumentChecks.isNotNull(workOrder);
 			ArgumentChecks.isNotNull(intervention);
 			ArgumentChecks.isNotNull(mechanic);
+
 			StateChecks.isTrue(intervention.getWorkOrder() == null, "Intervention already has a work order");
 			StateChecks.isTrue(intervention.getMechanic() == null, "Intervention already has a mechanic");
-			StateChecks.isFalse(workOrder._getInterventions().contains(intervention), "Work order already has this intervention");
+			StateChecks.isFalse(workOrder._getInterventions().contains(intervention),
+					"Work order already has this intervention");
 
-			throw new UnsupportedOperationException("Not implemented yet");
+			intervention._setWorkOrder(workOrder);
+			intervention._setMechanic(mechanic);
+			workOrder._getInterventions().add(intervention);
 		}
 
 		/* package */ static void atomicUnlink(Intervention intervention) {
@@ -164,29 +215,31 @@ public class Associations {
 			WorkOrder workOrder = intervention.getWorkOrder();
 			StateChecks.isTrue(workOrder != null, "Intervention has no work order");
 			StateChecks.isTrue(intervention.getMechanic() != null, "Intervention has no mechanic");
-			StateChecks.isTrue(workOrder._getInterventions().contains(intervention), "Work order does not have this intervention");
+			StateChecks.isTrue(workOrder._getInterventions().contains(intervention),
+					"Work order does not have this intervention");
 
-			throw new UnsupportedOperationException("Not implemented yet");
+			workOrder._getInterventions().remove(intervention);
+			intervention._setMechanic(null);
+			intervention._setWorkOrder(null);
 		}
 	}
 
 	/**
-	 * Atomically manages the performs and substitutes associations of a Substitution.
-	 * All identity ends are set before adding to, and cleared after removing from,
-	 * the inverse collection.
+	 * Atomically manages the performs and substitutes associations of a
+	 * Substitution. All identity ends are set before adding to, and cleared after
+	 * removing from, the inverse collection.
 	 */
 	public static class PerformsSubstitutes {
 
-		/* package */ static void atomicLink(
-				Intervention intervention,
-				Substitution substitution,
+		/* package */ static void atomicLink(Intervention intervention, Substitution substitution,
 				SparePart sparePart) {
 			ArgumentChecks.isNotNull(intervention);
 			ArgumentChecks.isNotNull(substitution);
 			ArgumentChecks.isNotNull(sparePart);
 			StateChecks.isTrue(substitution.getIntervention() == null, "Substitution already has an intervention");
 			StateChecks.isTrue(substitution.getSparePart() == null, "Substitution already has a spare part");
-			StateChecks.isFalse(intervention._getSubstitutions().contains(substitution), "Intervention already has this substitution");
+			StateChecks.isFalse(intervention._getSubstitutions().contains(substitution),
+					"Intervention already has this substitution");
 
 			substitution._setIntervention(intervention);
 			substitution._setSparePart(sparePart);
@@ -198,7 +251,8 @@ public class Associations {
 			Intervention intervention = substitution.getIntervention();
 			StateChecks.isTrue(intervention != null, "Substitution has no intervention");
 			StateChecks.isTrue(substitution.getSparePart() != null, "Substitution has no spare part");
-			StateChecks.isTrue(intervention._getSubstitutions().contains(substitution), "Intervention does not have this substitution");
+			StateChecks.isTrue(intervention._getSubstitutions().contains(substitution),
+					"Intervention does not have this substitution");
 
 			intervention._getSubstitutions().remove(substitution);
 			substitution._setIntervention(null);
