@@ -58,9 +58,11 @@ public class Intervention {
 		ArgumentChecks.isNotNull(workOrder, "Work order cannot be null");
 		ArgumentChecks.isNotNull(date, "Date cannot be null");
 		ArgumentChecks.isTrue(minutes >= 0, "Minutes must be non-negative");
-		ArgumentChecks.isNotNull(substitutions, "Substitutions map cannot be null");
+
+		validateSubstitutions(substitutions);
 
 		this.date = date.truncatedTo(ChronoUnit.MILLIS);
+		this.minutes = minutes;
 
 		// Doble asociacion:
 		Associations.RecordsIntervenes.atomicLink(workOrder, this, mechanic);
@@ -77,9 +79,26 @@ public class Intervention {
 		return minutes;
 	}
 
+//	@Override
+//	public int hashCode() {
+//		return Objects.hash(date);
+//	}
+//
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (this == obj)
+//			return true;
+//		if (obj == null)
+//			return false;
+//		if (getClass() != obj.getClass())
+//			return false;
+//		Intervention other = (Intervention) obj;
+//		return Objects.equals(date, other.date);
+//	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(date);
+		return Objects.hash(date, mechanic, workOrder);
 	}
 
 	@Override
@@ -91,7 +110,8 @@ public class Intervention {
 		if (getClass() != obj.getClass())
 			return false;
 		Intervention other = (Intervention) obj;
-		return Objects.equals(date, other.date);
+		return Objects.equals(date, other.date) && Objects.equals(mechanic, other.mechanic)
+				&& Objects.equals(workOrder, other.workOrder);
 	}
 
 	@Override
@@ -128,7 +148,7 @@ public class Intervention {
 	// ---------------------------- Business methods -----------------------------
 
 	/* package */ void removeSubstitutions() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		new HashSet<>(substitutions).forEach(Associations.PerformsSubstitutes::atomicUnlink);
 	}
 
 	/**
@@ -150,7 +170,13 @@ public class Intervention {
 	}
 
 	private Money calculateSparesAmount() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		Money.MoneyCalculator calculator = Money.calc();
+
+		for (Substitution substitution : substitutions) {
+			calculator.add(substitution.getTotalAmount());
+		}
+
+		return calculator.toMoneyExact();
 	}
 
 	private void addSubstitution(SparePart sparePart, int quantity) {
@@ -158,7 +184,15 @@ public class Intervention {
 	}
 
 	private static void validateSubstitutions(Map<SparePart, Integer> substitutions) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		ArgumentChecks.isNotNull(substitutions);
+
+		substitutions.forEach((sparePart, quantity) -> {
+			ArgumentChecks.isNotNull(sparePart, "Spare part cannot be null");
+
+			ArgumentChecks.isNotNull(quantity, "Quantity cannot be null");
+
+			ArgumentChecks.isTrue(quantity > 0, "Quantity must be positive");
+		});
 	}
 
 }

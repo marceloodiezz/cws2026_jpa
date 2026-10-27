@@ -33,11 +33,12 @@ public class Substitution {
 		// link the substitution with the intervention and spare part (atomiclink)
 		ArgumentChecks.isNotNull(sparePart, "Spare part cannot be null");
 		ArgumentChecks.isNotNull(intervention, "Intervention cannot be null");
-		ArgumentChecks.isTrue(quantity >= 0, "Quantity must be positive");
+		ArgumentChecks.isTrue(quantity > 0, "Quantity must be positive");
 
-		this.sparePart = sparePart;
-		this.intervention = intervention;
+		this.price = sparePart.getUnitPrice();
 		this.quantity = quantity;
+
+		Associations.PerformsSubstitutes.atomicLink(intervention, this, sparePart);
 	}
 
 	// ---------------------------- Association helpers
@@ -69,7 +70,7 @@ public class Substitution {
 
 	// ---------------------------- Business methods -----------------------------
 	public Money getTotalAmount() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return Money.calc(price).times(quantity).toMoneyRoundedToCents();
 	}
 
 	@Override

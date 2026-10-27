@@ -74,8 +74,17 @@ public class Invoice {
 		ArgumentChecks.isNotNull(date, "Invoice date cannot be null");
 		ArgumentChecks.isNotNull(workOrders, "Work orders list cannot be null");
 
+		for (WorkOrder workOrder : workOrders) {
+			ArgumentChecks.isNotNull(workOrder, "Work order cannot be null");
+
+			StateChecks.isTrue(workOrder.isApproved(), "Work order is not approved");
+
+			StateChecks.isTrue(workOrder.getInvoice() == null, "Work order already has an invoice");
+		}
+
 		this.number = number;
 		this.date = date;
+
 		workOrders.forEach(this::addWorkOrder);
 	}
 
@@ -86,6 +95,22 @@ public class Invoice {
 
 	public Set<Charge> getCharges() {
 		return new HashSet<>(charges);
+	}
+
+	public Money getSubtotal() {
+		return subtotal;
+	}
+
+	public Percentage getVatRate() {
+		return vatRate;
+	}
+
+	public Money getVatAmount() {
+		return vatAmount;
+	}
+
+	public Money getTotal() {
+		return total;
 	}
 
 	// ------------------ Association helpers (package-private)
@@ -109,11 +134,19 @@ public class Invoice {
 	 */
 	public void addWorkOrder(WorkOrder workOrder) {
 		// Validations
-		// links the work order
-		// compute the invoice amount after adding the work order
-		// marks it as invoiced
+		ArgumentChecks.isNotNull(workOrder, "Work order cannot be null");
 
-		throw new UnsupportedOperationException("Not implemented yet");
+		StateChecks.isTrue(!isSettled(), "Invoice is settled");
+		StateChecks.isTrue(workOrder.isApproved(), "Work order is not approved");
+
+		// links the work order
+		Associations.Bills.link(this, workOrder);
+
+		// compute the invoice amount after adding the work order
+		computeAmount();
+
+		// marks it as invoiced
+		workOrder.invoice();
 	}
 
 	/**
@@ -122,7 +155,17 @@ public class Invoice {
 	 * @param workOrder
 	 */
 	public void removeWorkOrder(WorkOrder workOrder) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		ArgumentChecks.isNotNull(workOrder, "Work order cannot be null");
+
+		StateChecks.isTrue(!isSettled(), "Invoice is settled");
+
+		ArgumentChecks.isTrue(workOrders.contains(workOrder), "Work order does not belong to this invoice");
+
+		workOrder.uninvoice();
+
+		Associations.Bills.unlink(workOrder);
+
+		computeAmount();
 	}
 
 	public boolean isSettled() {
@@ -145,7 +188,25 @@ public class Invoice {
 		// mean
 		// Set the invoice state to PAID
 
-		throw new UnsupportedOperationException("Not implemented yet");
+		StateChecks.isTrue(!isSettled(), "Invoice is already settled");
+		ArgumentChecks.isNotNull(requestedCharges, "Requested charges cannot be null");
+		ArgumentChecks.isTrue(!requestedCharges.isEmpty(), "Requested charges cannot be empty");
+
+		Map<PaymentMean, Money> normalizedCharges = normalize(requestedCharges);
+
+		StateChecks.isTrue(total.greaterThan(Money.ZERO), "Invoice total must be positive");
+
+		StateChecks.isTrue(chargesTotal(normalizedCharges).equals(total), "Charges total must equal invoice total");
+
+		normalizedCharges.forEach((paymentMean, amount) -> {
+			StateChecks.isTrue(paymentMean.canBeCharged(amount), "Payment mean cannot be charged");
+		});
+		
+		normalizedCharges.forEach((paymentMean, amount) -> {
+	        new Charge(this, paymentMean, amount);
+	    });
+
+		state = InvoiceState.PAID;
 	}
 
 	public void unSettle() {
@@ -158,10 +219,22 @@ public class Invoice {
 	// ---- Calculation ----
 	private void computeAmount() {
 		// 1. Sum all work order totals = subtotal
+		Money.MoneyCalculator calculator = Money.calc();
+
+		for (WorkOrder workOrder : workOrders) {
+			calculator.add(workOrder.getAmount());
+		}
+
+		this.subtotal = calculator.toMoneyRoundedToCents();
+
 		// 2. Determine VAT rate based on invoice date
+		this.vatRate = getApplicableVatRate();
+
 		// 3. Compute VAT amount
+		this.vatAmount = Money.calc(subtotal).times(vatRate).toMoneyRoundedToCents();
+
 		// 4. Compute total amount (subtotal + VAT) rounded to cents
-		throw new UnsupportedOperationException("Not implemented yet");
+		this.total = Money.calc(subtotal).add(vatAmount).toMoneyRoundedToCents();
 	}
 
 	private Percentage getApplicableVatRate() {
@@ -200,7 +273,7 @@ public class Invoice {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(date, Long.valueOf(number), state);
+		return Objects.hash(Long.valueOf(number));
 	}
 
 	@Override
@@ -212,7 +285,7 @@ public class Invoice {
 		if (getClass() != obj.getClass())
 			return false;
 		Invoice other = (Invoice) obj;
-		return Objects.equals(date, other.date) && number == other.number && state == other.state;
+		return number == other.number;
 	}
 
 	@Override

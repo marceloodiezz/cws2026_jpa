@@ -63,21 +63,26 @@ public class Associations {
 		public static void link(Client client, PaymentMean paymentMean) {
 			ArgumentChecks.isNotNull(client);
 			ArgumentChecks.isNotNull(paymentMean);
+
 			StateChecks.isTrue(paymentMean.getClient() == null, "Payment mean already has a client");
 			StateChecks.isFalse(client._getPaymentMeans().contains(paymentMean),
 					"Client already has this payment mean");
 
-			throw new UnsupportedOperationException("Not implemented yet");
+			paymentMean._setClient(client);
+			client._getPaymentMeans().add(paymentMean);
 		}
 
 		public static void unlink(PaymentMean paymentMean) {
 			ArgumentChecks.isNotNull(paymentMean);
+
 			Client client = paymentMean.getClient();
+
 			StateChecks.isTrue(client != null, "Payment mean has no client");
 			StateChecks.isTrue(client._getPaymentMeans().contains(paymentMean),
 					"Client does not have this payment mean");
 
-			throw new UnsupportedOperationException("Not implemented yet");
+			client._getPaymentMeans().remove(paymentMean);
+			paymentMean._setClient(null);
 		}
 	}
 

@@ -63,7 +63,7 @@ public class Mechanic {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(fullName, nif);
+		return Objects.hash(nif);
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class Mechanic {
 		if (getClass() != obj.getClass())
 			return false;
 		Mechanic other = (Mechanic) obj;
-		return Objects.equals(fullName, other.fullName) && Objects.equals(nif, other.nif);
+		return Objects.equals(nif, other.nif);
 	}
 
 	@Override

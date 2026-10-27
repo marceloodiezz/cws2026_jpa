@@ -3,6 +3,7 @@ package uo.ri.cws.domain;
 import java.util.Objects;
 
 import uo.ri.cws.domain.types.Money;
+import uo.ri.util.assertion.ArgumentChecks;
 
 public class VehicleType {
 
@@ -10,9 +11,12 @@ public class VehicleType {
 	private Money pricePerHour;
 
 	public VehicleType(String name, Money pricePerHour) {
-		super();
+		ArgumentChecks.isNotBlank(name);
+		ArgumentChecks.isNotNull(pricePerHour);
+		ArgumentChecks.isTrue(pricePerHour.isNonNegative());
+
 		this.name = name;
-		this.pricePerHour = pricePerHour;
+		this.pricePerHour = Money.calc(pricePerHour).toMoneyRoundedToCents();
 	}
 
 	public String getName() {
@@ -25,7 +29,7 @@ public class VehicleType {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, pricePerHour);
+		return Objects.hash(name);
 	}
 
 	@Override
@@ -37,7 +41,7 @@ public class VehicleType {
 		if (getClass() != obj.getClass())
 			return false;
 		VehicleType other = (VehicleType) obj;
-		return Objects.equals(name, other.name) && Objects.equals(pricePerHour, other.pricePerHour);
+		return Objects.equals(name, other.name);
 	}
 
 	@Override

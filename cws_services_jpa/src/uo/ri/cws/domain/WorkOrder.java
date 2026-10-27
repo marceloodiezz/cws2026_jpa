@@ -165,7 +165,11 @@ public class WorkOrder {
 	 * @throws IllegalStateException if The work order is not in OPEN state
 	 */
 	public void assignTo(Mechanic mechanic) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		ArgumentChecks.isNotNull(mechanic, "Mechanic cannot be null");
+		StateChecks.isTrue(isOpen(), "Work order is not open");
+
+		Associations.Assigns.link(mechanic, this);
+		state = WorkOrderState.ASSIGNED;
 	}
 
 	/**
@@ -176,7 +180,10 @@ public class WorkOrder {
 	 * @throws IllegalStateException if The work order is not in ASSIGNED state
 	 */
 	public void unassign() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		StateChecks.isTrue(isAssigned(), "Work order is not assigned");
+
+		Associations.Assigns.unlink(this);
+		state = WorkOrderState.OPEN;
 	}
 
 	/**
@@ -187,7 +194,13 @@ public class WorkOrder {
 	 * @throws IllegalStateException if the work order is not in ASSIGNED state
 	 */
 	public void finish() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		StateChecks.isTrue(isAssigned(), "Work order is not assigned");
+
+//		computeAmount();
+
+		Associations.Assigns.unlink(this);
+
+		state = WorkOrderState.FINISHED;
 	}
 
 	/**
@@ -198,7 +211,11 @@ public class WorkOrder {
 	 * @throws IllegalStateException if the work order is not in FINISHED state
 	 */
 	public void approve() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		StateChecks.isTrue(isFinished(), "Work order is not finished");
+
+		computeAmount();
+
+		state = WorkOrderState.APPROVED;
 	}
 
 	/**
@@ -209,7 +226,10 @@ public class WorkOrder {
 	 *                               if it has no invoice assigned
 	 */
 	public void invoice() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		StateChecks.isTrue(isApproved(), "Work order is not approved");
+		StateChecks.isTrue(invoice != null, "Work order has no invoice");
+
+		state = WorkOrderState.INVOICED;
 	}
 
 	/**
@@ -219,7 +239,10 @@ public class WorkOrder {
 	 * @throws IllegalStateException if the work order is not in APPROVED state
 	 */
 	public void unapprove() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		StateChecks.isTrue(isApproved(), "Work order is not approved");
+
+		amount = Money.ZERO;
+	    state = WorkOrderState.FINISHED;
 	}
 
 	/**
@@ -229,7 +252,9 @@ public class WorkOrder {
 	 * @throws IllegalStateException if the work order is not in INVOICED state
 	 */
 	public void uninvoice() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		StateChecks.isTrue(isInvoiced(), "Work order is not invoiced");
+
+		state = WorkOrderState.APPROVED;
 	}
 
 	/**
@@ -239,7 +264,9 @@ public class WorkOrder {
 	 * @throws IllegalStateException if the work order is not in FINISHED state
 	 */
 	public void reopen() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		StateChecks.isTrue(isFinished(), "Work order is not finished");
+
+		state = WorkOrderState.OPEN;
 	}
 
 	// ---- Intervention management ----
@@ -299,11 +326,32 @@ public class WorkOrder {
 	public void addIntervention(Mechanic mechanic, LocalDateTime date, int minutes,
 			Map<SparePart, Integer> substitutions) {
 		// Validate input parameters
+		ArgumentChecks.isNotNull(mechanic, "Mechanic cannot be null");
+		ArgumentChecks.isNotNull(date, "Date cannot be null");
+		ArgumentChecks.isTrue(minutes >= 0, "Minutes must be non-negative");
+		ArgumentChecks.isNotNull(substitutions, "Substitutions cannot be null");
+
+		substitutions.forEach((sparePart, quantity) -> {
+			ArgumentChecks.isNotNull(sparePart, "Spare part cannot be null");
+			ArgumentChecks.isNotNull(quantity, "Quantity cannot be null");
+			ArgumentChecks.isTrue(quantity > 0, "Quantity must be positive");
+		});
+
 		// State checks: work order must be assigned or finished, and no duplicated
 		// intervention
+		StateChecks.isTrue(isAssigned() || isFinished(), "Work order neither assigned nor finished");
+
 		// truncate the date to milliseconds to avoid precision issues
+		LocalDateTime truncatedDate = date.truncatedTo(ChronoUnit.MILLIS);
+
+		boolean duplicated = interventions.stream()
+				.anyMatch(intervention -> intervention.getDate().equals(truncatedDate)
+						&& intervention.getMechanic().equals(mechanic));
+
+		StateChecks.isFalse(duplicated, "Duplicated intervention");
+
 		// Create a new Intervention (that auto links it to the work order and mechanic)
-		throw new UnsupportedOperationException("Not implemented yet");
+		new Intervention(mechanic, this, truncatedDate, minutes, substitutions);
 	}
 
 	public void removeIntervention(Intervention intervention) {
@@ -317,7 +365,13 @@ public class WorkOrder {
 
 	// ---- Amount calculation ----
 	private void computeAmount() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		Money.MoneyCalculator calculator = Money.calc();
+
+		for (Intervention intervention : interventions) {
+			calculator.add(intervention.getTotalAmount());
+		}
+
+		this.amount = calculator.toMoneyRoundedToCents();
 	}
 
 }

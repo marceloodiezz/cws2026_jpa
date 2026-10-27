@@ -80,7 +80,7 @@ public class Vehicle {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(licensePlate, make, model);
+		return Objects.hash(licensePlate);
 	}
 
 	@Override
@@ -92,8 +92,7 @@ public class Vehicle {
 		if (getClass() != obj.getClass())
 			return false;
 		Vehicle other = (Vehicle) obj;
-		return Objects.equals(licensePlate, other.licensePlate) && Objects.equals(make, other.make)
-				&& Objects.equals(model, other.model);
+		return Objects.equals(licensePlate, other.licensePlate);
 	}
 
 	@Override

@@ -47,6 +47,10 @@ public class SparePart {
 		return unitPrice;
 	}
 
+	public Money getPrice() {
+		return unitPrice;
+	}
+
 	public Set<Substitution> getSubstitutions() {
 		return new HashSet<>(substitutions);
 	}

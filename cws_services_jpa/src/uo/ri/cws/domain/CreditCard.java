@@ -2,6 +2,7 @@ package uo.ri.cws.domain;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.Objects;
 
 import uo.ri.cws.domain.types.CreditCardNumber;
 import uo.ri.cws.domain.types.Money;
@@ -36,6 +37,28 @@ public class CreditCard extends PaymentMean {
 		return YearMonth.from(validThru);
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(number);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CreditCard other = (CreditCard) obj;
+		return Objects.equals(number, other.number);
+	}
+
+	@Override
+	public String toString() {
+		return "CreditCard [number=" + number + ", type=" + type + ", validThru=" + validThru + "]";
+	}
+
 	// ---- Business methods ----
 	public boolean isValidNow() {
 		return !validThru.isBefore(LocalDate.now()); // validThru >= today, today included
@@ -46,6 +69,7 @@ public class CreditCard extends PaymentMean {
 	 */
 	@Override
 	public boolean canBeCharged(Money amount) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		checkPositive(amount);
+		return isValidNow();
 	}
 }
