@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# Maven
+**/target/
+
+# Eclipse (archivos locales)
+**/.metadata/
+**/.classpath
+**/.project
+**/.settings/
+
+# Archivos temporales
+*.log
+*.tmp
