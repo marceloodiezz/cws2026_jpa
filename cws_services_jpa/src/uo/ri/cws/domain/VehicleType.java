@@ -2,13 +2,24 @@ package uo.ri.cws.domain;
 
 import java.util.Objects;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.Money;
 import uo.ri.util.assertion.ArgumentChecks;
 
-public class VehicleType {
+@Entity
+public class VehicleType extends BaseEntity {
 
+	@Column(unique = true)
 	private String name;
+
+	@AttributeOverride(name = "amount", column = @Column(name = "PRICEPERHOUR", precision = 10, scale = 2))
 	private Money pricePerHour;
+
+	VehicleType() {
+	}
 
 	public VehicleType(String name, Money pricePerHour) {
 		ArgumentChecks.isNotBlank(name);

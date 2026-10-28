@@ -7,11 +7,24 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.Money;
 import uo.ri.util.assertion.ArgumentChecks;
 import uo.ri.util.assertion.StateChecks;
 
-public class WorkOrder {
+@Entity
+@Table(name = "TWORKORDERS", uniqueConstraints = { @UniqueConstraint(columnNames = { "VEHICLE_ID", "date" }) })
+public class WorkOrder extends BaseEntity {
 
 	public enum WorkOrderState {
 		OPEN, ASSIGNED, FINISHED, APPROVED, INVOICED
@@ -20,16 +33,30 @@ public class WorkOrder {
 	// Natural attributes
 	private LocalDateTime date;
 	private String description;
+
+	@AttributeOverride(name = "amount", column = @Column(name = "AMOUNT", precision = 10, scale = 2))
 	private Money amount = Money.ZERO; // cents
+
+	@Enumerated(EnumType.STRING)
 	private WorkOrderState state = WorkOrderState.OPEN;
 
 	// Accidental attributes
+	@ManyToOne
 	private Invoice invoice;
+
+	@ManyToOne
 	private Mechanic mechanic;
+
+	@ManyToOne
 	private Vehicle vehicle;
+
+	@OneToMany(mappedBy = "workOrder", orphanRemoval = true, cascade = CascadeType.ALL)
 	private Set<Intervention> interventions = new HashSet<>();
 
 	// ---- Constructors ----
+
+	WorkOrder() {
+	}
 
 	public WorkOrder(Vehicle vehicle) {
 		this(vehicle, LocalDateTime.now(), "no-description");
@@ -242,7 +269,7 @@ public class WorkOrder {
 		StateChecks.isTrue(isApproved(), "Work order is not approved");
 
 		amount = Money.ZERO;
-	    state = WorkOrderState.FINISHED;
+		state = WorkOrderState.FINISHED;
 	}
 
 	/**

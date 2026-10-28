@@ -4,18 +4,31 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.Money;
 import uo.ri.util.assertion.ArgumentChecks;
 
-public class SparePart {
+@Entity
+public class SparePart extends BaseEntity {
 
 	// Natural attributes
+	@Column(unique = true)
 	private String code;
 	private String description;
+
+	@AttributeOverride(name = "amount", column = @Column(name = "UNITPRICE", precision = 10, scale = 2))
 	private Money unitPrice;
 
 	// Accidental attributes
+	@OneToMany(mappedBy = "sparePart")
 	private Set<Substitution> substitutions = new HashSet<>();
+
+	SparePart() {
+	}
 
 	public SparePart(String code) {
 		this(code, "no-description", Money.ZERO);
