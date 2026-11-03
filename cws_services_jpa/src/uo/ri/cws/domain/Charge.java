@@ -1,7 +1,5 @@
 package uo.ri.cws.domain;
 
-import java.util.Objects;
-
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,7 +16,7 @@ import uo.ri.util.assertion.StateChecks;
 public class Charge extends BaseEntity {
 
 	// Natural attributes
-	@AttributeOverride(name = "amount", column = @Column(name = "AMOUNT", precision = 19, scale = 2))
+	@AttributeOverride(name = "amount", column = @Column(name = "CHARGE", precision = 19, scale = 2))
 	private Money amount; // cents
 
 	// Accidental attributes
