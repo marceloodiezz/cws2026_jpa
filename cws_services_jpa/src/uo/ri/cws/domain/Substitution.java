@@ -25,7 +25,7 @@ import uo.ri.util.assertion.ArgumentChecks;
 public class Substitution extends BaseEntity {
 
 	// Natural attributes
-	@AttributeOverride(name = "amount", column = @Column(name = "PRICE", precision = 10, scale = 2))
+	@AttributeOverride(name = "amount", column = @Column(name = "PRICE", precision = 19, scale = 2))
 	private Money price;
 	private int quantity;
 

@@ -34,7 +34,7 @@ public class WorkOrder extends BaseEntity {
 	private LocalDateTime date;
 	private String description;
 
-	@AttributeOverride(name = "amount", column = @Column(name = "AMOUNT", precision = 10, scale = 2))
+	@AttributeOverride(name = "amount", column = @Column(name = "AMOUNT", precision = 19, scale = 2))
 	private Money amount = Money.ZERO; // cents
 
 	@Enumerated(EnumType.STRING)

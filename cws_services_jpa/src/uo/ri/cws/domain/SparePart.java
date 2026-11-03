@@ -20,7 +20,7 @@ public class SparePart extends BaseEntity {
 	private String code;
 	private String description;
 
-	@AttributeOverride(name = "amount", column = @Column(name = "UNITPRICE", precision = 10, scale = 2))
+	@AttributeOverride(name = "amount", column = @Column(name = "UNITPRICE", precision = 19, scale = 2))
 	private Money unitPrice;
 
 	// Accidental attributes

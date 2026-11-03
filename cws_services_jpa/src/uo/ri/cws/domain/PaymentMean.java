@@ -16,7 +16,7 @@ import uo.ri.util.assertion.StateChecks;
 public abstract class PaymentMean extends BaseEntity {
 
 	// Natural attributes
-	@AttributeOverride(name = "amount", column = @Column(name = "ACCUMULATED", precision = 10, scale = 2))
+	@AttributeOverride(name = "amount", column = @Column(name = "ACCUMULATED", precision = 19, scale = 2))
 	private Money accumulated = Money.ZERO; // cents
 
 	// Accidental attributes

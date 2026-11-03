@@ -41,27 +41,27 @@ public class Invoice extends BaseEntity {
 	 * taxable base.
 	 */
 	// Esto va en todos los atributos de tipo Money
-	@AttributeOverride(name = "amount", column = @Column(name = "SUBTOTAL", precision = 10, scale = 2))
+	@AttributeOverride(name = "amount", column = @Column(name = "SUBTOTAL", precision = 19, scale = 2))
 	private Money subtotal = Money.ZERO; // cents
 
 	/*
 	 * VAT rate applied to the invoice, expressed as a percentage. Example: 21% VAT.
 	 */
-	@AttributeOverride(name = "value", column = @Column(name = "VATRATE", precision = 10, scale = 2))
+	@AttributeOverride(name = "value", column = @Column(name = "VATRATE", precision = 19, scale = 2))
 	private Percentage vatRate = Percentage.ofPercent(21); // default to 21%
 
 	/*
 	 * VAT amount calculated from the subtotal amount. This is the tax the customer
 	 * must pay.
 	 */
-	@AttributeOverride(name = "amount", column = @Column(name = "VATAMOUNT", precision = 10, scale = 2))
+	@AttributeOverride(name = "amount", column = @Column(name = "VATAMOUNT", precision = 19, scale = 2))
 	private Money vatAmount = Money.ZERO; // cents
 
 	/*
 	 * Total amount of the invoice including VAT. This is the final amount the
 	 * customer must pay.
 	 */
-	@AttributeOverride(name = "amount", column = @Column(name = "TOTAL", precision = 10, scale = 2))
+	@AttributeOverride(name = "amount", column = @Column(name = "TOTAL", precision = 19, scale = 2))
 	private Money total = Money.ZERO; // cents
 
 	// Accidental attributes

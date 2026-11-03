@@ -18,7 +18,7 @@ import uo.ri.util.assertion.StateChecks;
 public class Charge extends BaseEntity {
 
 	// Natural attributes
-	@AttributeOverride(name = "amount", column = @Column(name = "AMOUNT", precision = 10, scale = 2))
+	@AttributeOverride(name = "amount", column = @Column(name = "AMOUNT", precision = 19, scale = 2))
 	private Money amount; // cents
 
 	// Accidental attributes
@@ -89,22 +89,22 @@ public class Charge extends BaseEntity {
 		this.paymentMean = paymentMean;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(invoice, paymentMean);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Charge other = (Charge) obj;
-		return Objects.equals(invoice, other.invoice) && Objects.equals(paymentMean, other.paymentMean);
-	}
+//	@Override
+//	public int hashCode() {
+//		return Objects.hash(invoice, paymentMean);
+//	}
+//
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (this == obj)
+//			return true;
+//		if (obj == null)
+//			return false;
+//		if (getClass() != obj.getClass())
+//			return false;
+//		Charge other = (Charge) obj;
+//		return Objects.equals(invoice, other.invoice) && Objects.equals(paymentMean, other.paymentMean);
+//	}
 
 	// ---- toString ----
 	@Override

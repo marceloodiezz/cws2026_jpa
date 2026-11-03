@@ -18,7 +18,7 @@ import uo.ri.util.assertion.ArgumentChecks;
 public class Vehicle extends BaseEntity {
 
 	// Natural attributes
-	@AttributeOverride(name = "licensePlate", column = @Column(name = "licensePlate", unique = true))
+	@AttributeOverride(name = "licensePlate", column = @Column(unique = true))
 	private LicensePlate licensePlate;
 	private String make;
 	private String model;

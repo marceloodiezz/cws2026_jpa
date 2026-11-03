@@ -15,7 +15,7 @@ public class VehicleType extends BaseEntity {
 	@Column(unique = true)
 	private String name;
 
-	@AttributeOverride(name = "amount", column = @Column(name = "PRICEPERHOUR", precision = 10, scale = 2))
+	@AttributeOverride(name = "amount", column = @Column(name = "PRICEPERHOUR", precision = 19, scale = 2))
 	private Money pricePerHour;
 
 	VehicleType() {
