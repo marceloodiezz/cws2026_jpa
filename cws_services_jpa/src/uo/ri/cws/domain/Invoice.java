@@ -38,6 +38,8 @@ public class Invoice extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private InvoiceState state = InvoiceState.ISSUED;
 
+	private boolean usedForVoucher = false;
+
 	/*
 	 * Subtotal amount of the invoice, before applying VAT. This represents the
 	 * taxable base.
@@ -295,6 +297,10 @@ public class Invoice extends BaseEntity {
 		return state;
 	}
 
+	public boolean isUsedForVoucher() {
+		return usedForVoucher;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(Long.valueOf(number));
@@ -315,6 +321,14 @@ public class Invoice extends BaseEntity {
 	@Override
 	public String toString() {
 		return "Invoice [number=" + number + ", date=" + date + ", state=" + state + "]";
+	}
+
+	public boolean canGenerateVoucher30() {
+		return isSettled() && total.greaterThan(Money.of("500.00")) && !usedForVoucher;
+	}
+
+	public void markAsUsedForVoucher() {
+		this.usedForVoucher = true;
 	}
 
 }

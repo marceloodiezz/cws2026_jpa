@@ -40,6 +40,8 @@ public class WorkOrder extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private WorkOrderState state = WorkOrderState.OPEN;
 
+	private boolean usedForVoucher = false;
+
 	// Accidental attributes
 	@ManyToOne
 	private Invoice invoice;
@@ -119,6 +121,14 @@ public class WorkOrder extends BaseEntity {
 
 	public Set<Intervention> getInterventions() {
 		return new HashSet<>(interventions);
+	}
+
+	public boolean isUsedForVoucher() {
+		return usedForVoucher;
+	}
+
+	public void markAsUsedForVoucher() {
+		this.usedForVoucher = true;
 	}
 
 	@Override

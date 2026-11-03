@@ -264,4 +264,46 @@ public class Associations {
 			substitution._setSparePart(null);
 		}
 	}
+
+	public static class Recommends {
+
+		public static void link(Client recommender, Recommendation recommendation, Client recommended) {
+			ArgumentChecks.isNotNull(recommender);
+			ArgumentChecks.isNotNull(recommendation);
+			ArgumentChecks.isNotNull(recommended);
+			ArgumentChecks.isTrue(!recommender.equals(recommended), "A client cannot recommend itself");
+
+			StateChecks.isTrue(recommendation.getRecommender() == null, "Recommendation already has a recommender");
+			StateChecks.isTrue(recommendation.getRecommended() == null,
+					"Recommendation already has a recommended client");
+			StateChecks.isFalse(recommender._getRecommendations().contains(recommendation),
+					"Recommendation already exists");
+			StateChecks.isTrue(recommended.getRecommendation() == null, "Client has already been recommended");
+
+			recommendation._setRecommender(recommender);
+			recommendation._setRecommended(recommended);
+			recommender._getRecommendations().add(recommendation);
+			recommended._setRecommendation(recommendation);
+		}
+
+		public static void unlink(Recommendation recommendation) {
+			ArgumentChecks.isNotNull(recommendation);
+
+			Client recommender = recommendation.getRecommender();
+			Client recommended = recommendation.getRecommended();
+
+			StateChecks.isTrue(recommender != null, "Recommendation has no recommender");
+			StateChecks.isTrue(recommended != null, "Recommendation has no recommended client");
+			StateChecks.isTrue(recommender._getRecommendations().contains(recommendation),
+					"Recommender does not contain the recommendation");
+			StateChecks.isTrue(recommended.getRecommendation() == recommendation,
+					"Recommended client has an inconsistent recommendation");
+
+			recommender._getRecommendations().remove(recommendation);
+			recommended._setRecommendation(null);
+			recommendation._setRecommender(null);
+			recommendation._setRecommended(null);
+		}
+	}
+
 }

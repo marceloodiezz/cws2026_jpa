@@ -1,6 +1,8 @@
 package uo.ri.cws.domain;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -16,6 +18,7 @@ import uo.ri.cws.domain.types.FullName;
 import uo.ri.cws.domain.types.Nif;
 import uo.ri.cws.domain.types.PhoneNumber;
 import uo.ri.util.assertion.ArgumentChecks;
+import uo.ri.util.assertion.StateChecks;
 
 @Entity
 @Table(name = "TCLIENTS")
@@ -35,6 +38,10 @@ public class Client extends BaseEntity {
 
 	@OneToMany(mappedBy = "client")
 	private Set<PaymentMean> paymentMeans = new HashSet<>();
+
+	private Set<Recommendation> recommendations = new HashSet<>();
+
+	private Recommendation recommendation;
 
 	// ---- Constructors ----
 	Client() {
@@ -121,6 +128,89 @@ public class Client extends BaseEntity {
 	public String toString() {
 		return "Client [nif=" + nif + ", fullName=" + fullName + ", email=" + email + ", phone=" + phone + ", address="
 				+ address + "]";
+	}
+
+	// Métodos de la extensión ------------------------------
+
+	public Set<Recommendation> getRecommendations() {
+		return new HashSet<>(recommendations);
+	}
+
+	Set<Recommendation> _getRecommendations() {
+		return recommendations;
+	}
+
+	public Recommendation getRecommendation() {
+		return recommendation;
+	}
+
+	void _setRecommendation(Recommendation recommendation) {
+		this.recommendation = recommendation;
+	}
+
+	private boolean hasPaidInvoice() {
+		for (Vehicle vehicle : getVehicles()) {
+			for (WorkOrder workOrder : vehicle.getWorkOrders()) {
+				Invoice invoice = workOrder.getInvoice();
+
+				if (invoice != null && invoice.isSettled()) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public List<Recommendation> getRecommendationsAvailableForVoucher25() {
+		List<Recommendation> available = new ArrayList<>();
+		for (Recommendation recommendation : getRecommendations()) {
+			if (!recommendation.isUsedForVoucher() && recommendation.getRecommended().hasPaidInvoice()) {
+				available.add(recommendation);
+			}
+		}
+
+		return available;
+	}
+
+	public boolean isEligibleForVoucher25() {
+		return hasPaidInvoice() && getRecommendationsAvailableForVoucher25().size() >= 3;
+	}
+
+	public void markThreeRecommendationsAsUsedForVoucher25() {
+		List<Recommendation> available = getRecommendationsAvailableForVoucher25();
+
+		StateChecks.isTrue(available.size() >= 3, "Not enough recommendations available");
+
+		for (int i = 0; i < 3; i++) {
+			available.get(i).markAsUsedForVoucher();
+		}
+	}
+
+	public List<WorkOrder> getWorkOrdersAvailableForVoucher20() {
+		List<WorkOrder> available = new ArrayList<>();
+
+		for (Vehicle vehicle : getVehicles()) {
+			for (WorkOrder workOrder : vehicle.getWorkOrders()) {
+				Invoice invoice = workOrder.getInvoice();
+
+				if (invoice != null && invoice.isSettled() && !workOrder.isUsedForVoucher()) {
+					available.add(workOrder);
+				}
+			}
+		}
+
+		return available;
+	}
+
+	public void markThreeWorkOrdersAsUsedForVoucher20() {
+		List<WorkOrder> available = getWorkOrdersAvailableForVoucher20();
+
+		StateChecks.isTrue(available.size() >= 3, "Not enough work orders available");
+
+		for (int i = 0; i < 3; i++) {
+			available.get(i).markAsUsedForVoucher();
+		}
 	}
 
 }
