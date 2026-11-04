@@ -3,16 +3,32 @@ package uo.ri.cws.domain;
 
 import java.util.Objects;
 
-public class Recommendation {
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import uo.ri.cws.domain.base.BaseEntity;
+
+@Entity
+@Table(name = "TRECOMMENDATIONS", uniqueConstraints = {
+		@UniqueConstraint(columnNames = { "RECOMMENDER_ID", "RECOMMENDED_ID" }) })
+public class Recommendation extends BaseEntity {
 
 	// Natural attributes
 	private boolean usedForVoucher = false;
 
 	// Accidental attributes
+	@ManyToOne
 	private Client recommender;
+
+	@OneToOne
 	private Client recommended;
 
 	// ---- Constructors ----
+
+	Recommendation() {
+	}
 
 	public Recommendation(Client recommender, Client recommended) {
 		Associations.Recommends.link(recommender, this, recommended);
