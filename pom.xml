@@ -10,7 +10,13 @@
 
 	<modules>
 		<module>cws_util</module>
+		<module>cws_service_interfaces</module>
 		<module>cws_services_jpa</module>
+		<module>cws_service_tests</module>
+		<module>cws_client_manager</module>
+		<module>cws_client_cashier</module>
+		<module>cws_client_mechanic</module>
+		<module>cws_client_foreman</module>
 	</modules>
 
 	<properties>
@@ -19,7 +25,8 @@
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
-		
+		<testSourceDirectory>test</testSourceDirectory>
+
 		<resources>
 			<resource>
 				<directory>src</directory>
@@ -28,15 +35,12 @@
 				</excludes>
 			</resource>
 		</resources>
-		
+
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.3</version>
 				<configuration>
-<!--
-					<verbose>true</verbose>
--->
 					<source>21</source>
 					<target>21</target>
 				</configuration>
@@ -47,35 +51,15 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.5.0</version>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>3.4.0</version>
-				<executions>
-					<execution>
-						<id>add-test-source</id>
-						<phase>generate-test-sources</phase>
-						<goals>
-							<goal>add-test-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>test</source>
-								<source>test_extended</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
-		
- 		<pluginManagement>
+
+		<pluginManagement>
 			<plugins>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>exec-maven-plugin</artifactId>
-                    <version>3.5.1</version>
-                </plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>3.5.1</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>

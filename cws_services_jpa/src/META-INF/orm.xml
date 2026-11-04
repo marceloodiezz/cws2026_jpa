@@ -4,7 +4,58 @@
 	xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence/orm https://jakarta.ee/xml/ns/persistence/orm/orm_3_1.xsd"
 	version="3.1">
 
-<!-- 
+	<!--  Vehicle queries  -->
+	<named-query name="Vehicle.findByPlate">
+		<query>select v from Vehicle v where v.licensePlate = ?1</query>
+	</named-query>
+	
+	<!--  WorkOrder queries  -->
+	<named-query name="WorkOrder.findByIds">
+		<query>select w from WorkOrder w where w.id in ?1</query>
+	</named-query>
+	
+	<!--  PaymentMean queries  -->
+	<named-query name="PaymentMean.findByInvoiceId">
+		<query>
+			select m 
+			from Invoice f 
+				join f.workOrders w 
+				join w.vehicle.client c 
+				join c.paymentMeans m 
+			where f.id = ?1
+		</query>
+	</named-query>
+	
+	<!--  Mechanic queries  -->
+	<named-query name="Mechanic.findByNif">
+		<query> select m from Mechanic m where m.nif = ?1 </query>
+	</named-query>
+	
+	<named-query name="Mechanic.countInterventions">
+		<query>
+			select count(i)
+			from Intervention i
+			where i.mechanic.id = ?1
+		</query>
+	</named-query>
+	
+	<!--  Invoice queries  -->
+	<named-query name="Invoice.findByNumber">
+		<query>select f from Invoice f where f.number = ?1</query>
+	</named-query>
+	
+	<named-query name="Invoice.getNextInvoiceNumber">
+		<query> 
+			select cast( coalesce(max(f.number) + 1, 1L) as bigint ) 
+			from Invoice f 
+		</query>
+		<!--  	
+			This breaks if there is none invoice
+			<query>select max(f.number) + 1 from Invoice f</query>
+ 		-->
+	</named-query>
+	
+<!--  
 	Use this format if your query has greater than numeric comparisons the one
 	in this example
 	
@@ -19,6 +70,5 @@
 			]]>
 	</query>
 	</named-query>
- -->
-
+  -->
 </entity-mappings>
