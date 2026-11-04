@@ -14,6 +14,16 @@
 		<query>select w from WorkOrder w where w.id in ?1</query>
 	</named-query>
 	
+	<named-query name="WorkOrder.findNotInvoicedByClientNif">
+	    <query>
+	        select w
+	        from WorkOrder w
+	            join w.vehicle v
+	            join v.client c
+	        where c.nif = ?1 and w.state = uo.ri.cws.domain.WorkOrder$WorkOrderState.APPROVED
+	    </query>
+	</named-query>
+	
 	<!--  PaymentMean queries  -->
 	<named-query name="PaymentMean.findByInvoiceId">
 		<query>
