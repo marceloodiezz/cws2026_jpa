@@ -13,3 +13,4 @@
 # Archivos temporales
 *.log
 *.tmp
+*.lck

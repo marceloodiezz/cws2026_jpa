@@ -5,6 +5,7 @@ import uo.ri.cws.application.repository.InvoiceRepository;
 import uo.ri.cws.application.repository.MechanicRepository;
 import uo.ri.cws.application.repository.PaymentMeanRepository;
 import uo.ri.cws.application.repository.PersistenceFactory;
+import uo.ri.cws.application.repository.RecommendationRepository;
 import uo.ri.cws.application.repository.SparePartRepository;
 import uo.ri.cws.application.repository.VehicleRepository;
 import uo.ri.cws.application.repository.VehicleTypeRepository;
@@ -25,6 +26,11 @@ public class JpaRepositoryFactory implements PersistenceFactory {
 	@Override
 	public PaymentMeanRepository forPaymentMean() {
 		return new PaymentMeanJpaRepository();
+	}
+
+	@Override
+	public RecommendationRepository forRecommendation() {
+		return new RecommendationJpaRepository();
 	}
 
 	@Override

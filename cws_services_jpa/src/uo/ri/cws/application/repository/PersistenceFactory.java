@@ -5,6 +5,7 @@ public interface PersistenceFactory {
 	MechanicRepository forMechanic();
 	WorkOrderRepository forWorkOrder();
 	PaymentMeanRepository forPaymentMean();
+	RecommendationRepository forRecommendation();
 	InvoiceRepository forInvoice();
 	ClientRepository forClient();
 	SparePartRepository forSparePart();

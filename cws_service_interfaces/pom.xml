@@ -6,7 +6,7 @@
 
 	<parent>
 		<groupId>uo.ri</groupId>
-		<artifactId>cws_base_2026</artifactId>
+		<artifactId>cws_extended_2026</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 

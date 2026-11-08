@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>uo.ri</groupId>
-	<artifactId>cws_base_2026</artifactId>
+	<artifactId>cws_extended_2026</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
@@ -26,7 +26,7 @@
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>test</testSourceDirectory>
-
+		
 		<resources>
 			<resource>
 				<directory>src</directory>
@@ -35,7 +35,7 @@
 				</excludes>
 			</resource>
 		</resources>
-
+		
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -52,14 +52,14 @@
 				<version>3.5.0</version>
 			</plugin>
 		</plugins>
-
+		
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>exec-maven-plugin</artifactId>
-					<version>3.5.1</version>
-				</plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>3.5.1</version>
+                </plugin>
 			</plugins>
 		</pluginManagement>
 	</build>

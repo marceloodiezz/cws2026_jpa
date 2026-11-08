@@ -2,10 +2,15 @@ package uo.ri.cws.application.service;
 
 import uo.ri.cws.application.service.client.ClientCrudService;
 import uo.ri.cws.application.service.client.ClientHistoryService;
+import uo.ri.cws.application.service.client.crud.ClientCrudServiceImpl;
 import uo.ri.cws.application.service.invoice.InvoicingService;
 import uo.ri.cws.application.service.invoice.create.InvoicingServiceImpl;
 import uo.ri.cws.application.service.mechanic.MechanicCrudService;
 import uo.ri.cws.application.service.mechanic.crud.MechanicCrudServiceImpl;
+import uo.ri.cws.application.service.paymentmean.PaymentMeanCrudService;
+import uo.ri.cws.application.service.paymentmean.VoucherGenerationService;
+import uo.ri.cws.application.service.paymentmean.crud.PaymentMeanCrudServiceImpl;
+import uo.ri.cws.application.service.paymentmean.voucher.VoucherGenerationServiceImpl;
 import uo.ri.cws.application.service.spare.SparePartCrudService;
 import uo.ri.cws.application.service.vehicle.VehicleCrudService;
 import uo.ri.cws.application.service.vehicle.crud.VehicleCrudServiceImpl;
@@ -28,6 +33,21 @@ public class JpaServicesFactoryImpl implements ServiceFactory {
 	}
 
 	@Override
+	public ClientCrudService forClientCrudService() {
+		return new ClientCrudServiceImpl();
+	}
+
+	@Override
+	public PaymentMeanCrudService forPaymentMeanCrudService() {
+		return new PaymentMeanCrudServiceImpl();
+	}
+
+	@Override
+	public VoucherGenerationService forVoucherService() {
+		return new VoucherGenerationServiceImpl();
+	}
+
+	@Override
 	public VehicleCrudService forVehicleCrudService() {
 		return new VehicleCrudServiceImpl();
 	}
@@ -35,11 +55,6 @@ public class JpaServicesFactoryImpl implements ServiceFactory {
 	// the not yet implemented section ------------------------------
 	@Override
 	public SparePartCrudService forSparePartCrudService() {
-		throw new NotYetImplementedException();
-	}
-
-	@Override
-	public ClientCrudService forClientCrudService() {
 		throw new NotYetImplementedException();
 	}
 
