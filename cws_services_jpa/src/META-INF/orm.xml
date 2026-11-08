@@ -13,6 +13,28 @@
 		</query>
 	</named-query>
 	
+	<named-query name="Client.findWithRecommendationsUnusedForVoucher">
+	    <query>
+	        select c
+	        from Client c
+	        where (
+	            select count(r)
+	            from Recommendation r
+	            where r.recommender = c
+	              and r.usedForVoucher = false
+	        ) >= ?1
+	    </query>
+	</named-query>
+	
+	<!-- CreditCard queries -->
+	<named-query name="CreditCard.findByNumber">
+	    <query>
+	        select c
+	        from CreditCard c
+	        where c.number = ?1
+	    </query>
+	</named-query>
+	
 	<!-- Invoice queries -->
 	<named-query name="Invoice.findByNumber">
 		<query>select f from Invoice f where f.number = ?1</query>
@@ -58,14 +80,6 @@
 	</named-query>
 
 	<!-- PaymentMean queries -->
-	<named-query name="PaymentMean.findByNif">
-		<query>
-			select pm
-			from PaymentMean pm
-			where pm.client.nif = ?1
-		</query>
-	</named-query>
-	
 	<named-query name="PaymentMean.findByInvoiceId">
 	    <query>
 	        select m
@@ -76,10 +90,55 @@
 	        where f.id = ?1
 	    </query>
 	</named-query>
+	
+	<named-query name="PaymentMean.findByNif">
+		<query>
+			select pm
+			from PaymentMean pm
+			where pm.client.nif = ?1
+		</query>
+	</named-query>
+	
+	<named-query name="PaymentMean.hasCharges">
+	    <query>
+	        select count(c)
+	        from Charge c
+	        where c.paymentMean.id = ?1
+	    </query>
+	</named-query>
 
 	<!-- Vehicle queries -->
 	<named-query name="Vehicle.findByPlate">
 		<query>select v from Vehicle v where v.licensePlate = ?1</query>
+	</named-query>
+	
+	<!-- Voucher queries -->
+	<named-query name="Voucher.findByClientNif">
+	    <query>
+	        select v
+	        from Voucher v
+	        where v.client.nif = ?1
+	    </query>
+	</named-query>
+	
+	<named-query name="Voucher.findByCode">
+	    <query>
+	        select v
+	        from Voucher v
+	        where v.code = ?1
+	    </query>
+	</named-query>
+	
+	<named-query name="Voucher.getSummary">
+	    <query>
+	        select v.client,
+	               count(v),
+	               sum(v.accumulated.amount),
+	               sum(v.availableAmount.amount)
+	        from Voucher v
+	        group by v.client
+	        order by sum(v.availableAmount.amount) desc
+	    </query>
 	</named-query>
 
 	<!-- WorkOrder queries -->
