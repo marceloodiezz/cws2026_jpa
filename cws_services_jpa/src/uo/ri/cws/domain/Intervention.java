@@ -98,23 +98,6 @@ public class Intervention extends BaseEntity {
 		return minutes;
 	}
 
-//	@Override
-//	public int hashCode() {
-//		return Objects.hash(date);
-//	}
-//
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (this == obj)
-//			return true;
-//		if (obj == null)
-//			return false;
-//		if (getClass() != obj.getClass())
-//			return false;
-//		Intervention other = (Intervention) obj;
-//		return Objects.equals(date, other.date);
-//	}
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(date, mechanic, workOrder);

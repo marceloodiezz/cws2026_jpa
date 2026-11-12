@@ -233,8 +233,6 @@ public class WorkOrder extends BaseEntity {
 	public void finish() {
 		StateChecks.isTrue(isAssigned(), "Work order is not assigned");
 
-//		computeAmount();
-
 		Associations.Assigns.unlink(this);
 
 		state = WorkOrderState.FINISHED;

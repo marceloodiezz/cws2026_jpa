@@ -16,26 +16,4 @@ public class MechanicJpaRepository extends BaseJpaRepository<Mechanic> implement
 				.getResultStream().findFirst();
 	}
 
-	// Todos estos métodos están ya en BaseJpaRepository:
-
-// @Override
-//	public void add(Mechanic t) {
-//		Jpa.getManager().persist(t);
-//	}
-//
-//	@Override
-//	public void remove(Mechanic t) {
-//		Jpa.getManager().remove(t);
-//	}
-//
-//	@Override
-//	public Optional<Mechanic> findById(String id) {
-//		return Optional.ofNullable(Jpa.getManager().find(Mechanic.class, id));
-//	}
-//
-//	@Override
-//	public List<Mechanic> findAll() {
-//		return Jpa.getManager().createNamedQuery("Mechanic.findAll", Mechanic.class).getResultList();
-//	}
-
 }

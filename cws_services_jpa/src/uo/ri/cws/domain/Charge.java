@@ -87,23 +87,6 @@ public class Charge extends BaseEntity {
 		this.paymentMean = paymentMean;
 	}
 
-//	@Override
-//	public int hashCode() {
-//		return Objects.hash(invoice, paymentMean);
-//	}
-//
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (this == obj)
-//			return true;
-//		if (obj == null)
-//			return false;
-//		if (getClass() != obj.getClass())
-//			return false;
-//		Charge other = (Charge) obj;
-//		return Objects.equals(invoice, other.invoice) && Objects.equals(paymentMean, other.paymentMean);
-//	}
-
 	// ---- toString ----
 	@Override
 	public String toString() {

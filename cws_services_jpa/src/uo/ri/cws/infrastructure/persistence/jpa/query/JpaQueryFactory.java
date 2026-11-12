@@ -5,7 +5,6 @@ import uo.ri.cws.application.query.InvoiceQueries;
 import uo.ri.cws.application.query.MechanicQueries;
 import uo.ri.cws.application.query.PaymentMeanQueries;
 import uo.ri.cws.application.query.QueryFactory;
-//import uo.ri.cws.application.query.VoucherQueries;
 
 public class JpaQueryFactory implements QueryFactory {
 
@@ -23,11 +22,6 @@ public class JpaQueryFactory implements QueryFactory {
 	public PaymentMeanQueries forPaymentMean() {
 		return new PaymentMeanJpaQueries();
 	}
-
-//	@Override
-//	public VoucherQueries forVoucher() {
-//		return new VoucherJpaQueries();
-//	}
 
 	@Override
 	public InvoiceQueries forInvoice() {
