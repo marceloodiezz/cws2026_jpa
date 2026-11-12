@@ -7,12 +7,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.Money;
 import uo.ri.util.assertion.ArgumentChecks;
@@ -21,22 +15,15 @@ import uo.ri.util.assertion.ArgumentChecks;
  * Represents an intervention performed by a mechanic on a work order. Internal
  * aggregate class of WorkOrder. Only WorkOrder can create Interventions.
  */
-@Entity
-@Table(name = "TINTERVENTIONS", uniqueConstraints = {
-		@UniqueConstraint(columnNames = { "WORKORDER_ID", "MECHANIC_ID", "date" }) })
 public class Intervention extends BaseEntity {
+
 	// Natural attributes
 	private LocalDateTime date;
 	private int minutes;
 
 	// Accidental attributes
-	@ManyToOne
 	private WorkOrder workOrder;
-
-	@ManyToOne
 	private Mechanic mechanic;
-
-	@OneToMany(mappedBy = "intervention", orphanRemoval = true, cascade = CascadeType.ALL)
 	private Set<Substitution> substitutions = new HashSet<>();
 
 	// ---------------------------- Constructors -----------------------------

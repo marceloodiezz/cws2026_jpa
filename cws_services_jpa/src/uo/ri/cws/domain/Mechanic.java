@@ -4,27 +4,18 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.FullName;
 import uo.ri.cws.domain.types.Nif;
 import uo.ri.util.assertion.ArgumentChecks;
 
-@Entity
-@Table(name = "TMECHANICS")
 public class Mechanic extends BaseEntity {
 
 	// Natural attributes
-	@AttributeOverride(name = "nif", column = @Column(unique = true))
 	private Nif nif;
 	private FullName fullName;
 
 	// Accidental attributes
-	@OneToMany(mappedBy = "mechanic")
 	private Set<WorkOrder> assigned = new HashSet<>();
 
 	Mechanic() {

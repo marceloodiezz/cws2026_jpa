@@ -6,12 +6,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.Address;
 import uo.ri.cws.domain.types.Email;
@@ -21,12 +15,9 @@ import uo.ri.cws.domain.types.PhoneNumber;
 import uo.ri.util.assertion.ArgumentChecks;
 import uo.ri.util.assertion.StateChecks;
 
-@Entity
-@Table(name = "TCLIENTS")
 public class Client extends BaseEntity {
 
 	// Natural attributes
-	@AttributeOverride(name = "nif", column = @Column(unique = true))
 	private Nif nif;
 	private FullName fullName;
 	private Email email;
@@ -34,16 +25,9 @@ public class Client extends BaseEntity {
 	private Address address;
 
 	// Accidental attributes
-	@OneToMany(mappedBy = "client")
 	private Set<Vehicle> vehicles = new HashSet<>();
-
-	@OneToMany(mappedBy = "client")
 	private Set<PaymentMean> paymentMeans = new HashSet<>();
-
-	@OneToMany(mappedBy = "recommender")
 	private Set<Recommendation> recommendations = new HashSet<>();
-
-	@OneToOne(mappedBy = "recommended")
 	private Recommendation recommendation;
 
 	// ---- Constructors ----

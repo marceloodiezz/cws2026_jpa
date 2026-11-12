@@ -1,28 +1,16 @@
 package uo.ri.cws.domain;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.Money;
 import uo.ri.util.assertion.ArgumentChecks;
 import uo.ri.util.assertion.StateChecks;
 
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "TPAYMENTMEANS")
 public abstract class PaymentMean extends BaseEntity {
 
 	// Natural attributes
-	@AttributeOverride(name = "amount", column = @Column(name = "ACCUMULATED", precision = 19, scale = 2))
 	private Money accumulated = Money.ZERO; // cents
 
 	// Accidental attributes
-	@ManyToOne
 	private Client client;
 
 	PaymentMean() {
