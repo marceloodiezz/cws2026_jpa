@@ -3,42 +3,46 @@ package uo.ri.cws.application.service.client.crud;
 import java.util.List;
 import java.util.Optional;
 
+import uo.ri.conf.Factories;
 import uo.ri.cws.application.service.client.ClientCrudService;
+import uo.ri.cws.application.service.client.crud.commands.FindAllClients;
+import uo.ri.cws.application.service.client.crud.commands.FindClientByNif;
+import uo.ri.cws.application.service.client.crud.commands.FindClientsRecommendedBy;
+import uo.ri.cws.application.util.command.CommandExecutor;
 import uo.ri.util.exception.BusinessException;
 
 public class ClientCrudServiceImpl implements ClientCrudService {
-	
+
+	private CommandExecutor executor = Factories.executor.forExecutor();
+
 	@Override
-    public ClientDto addClient(ClientDto client, String recommenderNif)
-            throws BusinessException {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+	public ClientDto addClient(ClientDto client, String recommenderNif) throws BusinessException {
+		throw new UnsupportedOperationException("Not implemented yet");
+	}
 
-    @Override
-    public void deleteClientByNif(String nif) throws BusinessException {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+	@Override
+	public void deleteClientByNif(String nif) throws BusinessException {
+		throw new UnsupportedOperationException("Not implemented yet");
+	}
 
-    @Override
-    public void updateClient(ClientDto client) throws BusinessException {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+	@Override
+	public void updateClient(ClientDto client) throws BusinessException {
+		throw new UnsupportedOperationException("Not implemented yet");
+	}
 
-    @Override
-    public List<ClientDto> findAllClients() throws BusinessException {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+	@Override
+	public List<ClientDto> findAllClients() throws BusinessException {
+		return executor.execute(new FindAllClients());
+	}
 
-    @Override
-    public Optional<ClientDto> findClientByNif(String nif)
-            throws BusinessException {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+	@Override
+	public Optional<ClientDto> findClientByNif(String nif) throws BusinessException {
+		return executor.execute(new FindClientByNif(nif));
+	}
 
-    @Override
-    public List<ClientDto> findClientsRecommendedBy(String recommenderNif)
-            throws BusinessException {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+	@Override
+	public List<ClientDto> findClientsRecommendedBy(String recommenderNif) throws BusinessException {
+		return executor.execute(new FindClientsRecommendedBy(recommenderNif));
+	}
 
 }

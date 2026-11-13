@@ -13,12 +13,14 @@ public class ClientJpaRepository extends BaseJpaRepository<Client> implements Cl
 
 	@Override
 	public Optional<Client> findByNif(Nif nif) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return Jpa.getManager().createNamedQuery("Client.findByNif", Client.class).setParameter(1, nif)
+				.getResultStream().findFirst();
 	}
 
 	@Override
 	public List<Client> findRecommendedBy(Nif recommenderNif) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return Jpa.getManager().createNamedQuery("Client.findRecommendedBy", Client.class)
+				.setParameter(1, recommenderNif).getResultList();
 	}
 
 	@Override

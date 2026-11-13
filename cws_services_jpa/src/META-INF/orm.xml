@@ -16,6 +16,14 @@
 		</query>
 	</named-query>
 	
+	<named-query name="Client.findRecommendedBy">
+	    <query>
+	        select r.recommended
+	        from Recommendation r
+	        where r.recommender.nif = ?1
+	    </query>
+	</named-query>
+	
 	<named-query name="Client.findWithRecommendationsUnusedForVoucher">
 	    <query>
 	        select c
