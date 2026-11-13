@@ -16,6 +16,14 @@
 		</query>
 	</named-query>
 	
+	<named-query name="Client.findRecommendedBy">
+	    <query>
+	        select r.recommended
+	        from Recommendation r
+	        where r.recommender.nif = ?1
+	    </query>
+	</named-query>
+	
 	<named-query name="Client.findWithRecommendationsUnusedForVoucher">
 	    <query>
 	        select c
@@ -26,6 +34,34 @@
 	            where r.recommender = c
 	              and r.usedForVoucher = false
 	        ) >= ?1
+	    </query>
+	</named-query>
+	
+	<named-query name="Client.findWithWorkOrdersUnusedForVoucher">
+	    <query>
+	        <![CDATA[
+	        select c
+	        from Client c
+	        where (
+	            select count(w)
+	            from WorkOrder w
+	            where w.vehicle.client = c
+	              and w.invoice is not null
+	              and w.invoice.state = uo.ri.cws.domain.Invoice$InvoiceState.PAID
+	              and w.usedForVoucher = false
+	        ) >= ?1
+	        ]]>
+	    </query>
+	</named-query>
+	
+	<named-query name="Client.hasPaidInvoices">
+	    <query>
+	        <![CDATA[
+	        select count(ch)
+	        from Charge ch
+	        where ch.paymentMean.client.id = ?1
+	          and ch.invoice.state = uo.ri.cws.domain.Invoice$InvoiceState.PAID
+	        ]]>
 	    </query>
 	</named-query>
 	
