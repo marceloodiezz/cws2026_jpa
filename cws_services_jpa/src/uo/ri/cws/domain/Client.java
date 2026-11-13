@@ -78,6 +78,31 @@ public class Client extends BaseEntity {
 		return address;
 	}
 
+	public void setNif(Nif nif) {
+		ArgumentChecks.isNotNull(nif, "The nif cannot be null");
+		this.nif = nif;
+	}
+
+	public void setFullName(FullName fullName) {
+		ArgumentChecks.isNotNull(fullName, "The full name cannot be null");
+		this.fullName = fullName;
+	}
+
+	public void setEmail(Email email) {
+		ArgumentChecks.isNotNull(email, "The email cannot be null");
+		this.email = email;
+	}
+
+	public void setPhone(PhoneNumber phone) {
+		ArgumentChecks.isNotNull(phone, "The phone cannot be null");
+		this.phone = phone;
+	}
+
+	public void setAddress(Address address) {
+		ArgumentChecks.isNotNull(address, "The address cannot be null");
+		this.address = address;
+	}
+
 	Set<Vehicle> _getVehicles() {
 		return vehicles;
 	}

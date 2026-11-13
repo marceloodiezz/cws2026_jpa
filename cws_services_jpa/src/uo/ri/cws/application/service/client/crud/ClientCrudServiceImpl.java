@@ -9,6 +9,7 @@ import uo.ri.cws.application.service.client.crud.commands.AddClient;
 import uo.ri.cws.application.service.client.crud.commands.FindAllClients;
 import uo.ri.cws.application.service.client.crud.commands.FindClientByNif;
 import uo.ri.cws.application.service.client.crud.commands.FindClientsRecommendedBy;
+import uo.ri.cws.application.service.client.crud.commands.UpdateClient;
 import uo.ri.cws.application.util.command.CommandExecutor;
 import uo.ri.util.exception.BusinessException;
 
@@ -28,7 +29,7 @@ public class ClientCrudServiceImpl implements ClientCrudService {
 
 	@Override
 	public void updateClient(ClientDto client) throws BusinessException {
-		throw new UnsupportedOperationException("Not implemented yet");
+		executor.execute(new UpdateClient(client));
 	}
 
 	@Override
