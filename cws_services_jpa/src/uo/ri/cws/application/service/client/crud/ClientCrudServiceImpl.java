@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import uo.ri.conf.Factories;
 import uo.ri.cws.application.service.client.ClientCrudService;
+import uo.ri.cws.application.service.client.crud.commands.AddClient;
 import uo.ri.cws.application.service.client.crud.commands.FindAllClients;
 import uo.ri.cws.application.service.client.crud.commands.FindClientByNif;
 import uo.ri.cws.application.service.client.crud.commands.FindClientsRecommendedBy;
@@ -17,7 +18,7 @@ public class ClientCrudServiceImpl implements ClientCrudService {
 
 	@Override
 	public ClientDto addClient(ClientDto client, String recommenderNif) throws BusinessException {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return executor.execute(new AddClient(client, recommenderNif));
 	}
 
 	@Override
