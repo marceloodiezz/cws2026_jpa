@@ -29,6 +29,23 @@
 	    </query>
 	</named-query>
 	
+	<named-query name="Client.findWithWorkOrdersUnusedForVoucher">
+	    <query>
+	        <![CDATA[
+	        select c
+	        from Client c
+	        where (
+	            select count(w)
+	            from WorkOrder w
+	            where w.vehicle.client = c
+	              and w.invoice is not null
+	              and w.invoice.state = uo.ri.cws.domain.Invoice$InvoiceState.PAID
+	              and w.usedForVoucher = false
+	        ) >= ?1
+	        ]]>
+	    </query>
+	</named-query>
+	
 	<!-- CreditCard queries -->
 	<named-query name="CreditCard.findByNumber">
 	    <query>

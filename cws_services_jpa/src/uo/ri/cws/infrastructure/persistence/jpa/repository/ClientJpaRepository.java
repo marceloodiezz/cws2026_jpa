@@ -23,12 +23,12 @@ public class ClientJpaRepository extends BaseJpaRepository<Client> implements Cl
 
 	@Override
 	public List<Client> findWithWorkOrdersUnusedForVoucher(int minimumWorkOrders) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return Jpa.getManager().createNamedQuery("Client.findWithWorkOrdersUnusedForVoucher", Client.class)
+				.setParameter(1, minimumWorkOrders).getResultList();
 	}
 
 	@Override
 	public List<Client> findWithRecommendationsUnusedForVoucher(int minimumRecommendations) {
-
 		return Jpa.getManager().createNamedQuery("Client.findWithRecommendationsUnusedForVoucher", Client.class)
 				.setParameter(1, minimumRecommendations).getResultList();
 	}
