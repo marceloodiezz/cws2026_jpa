@@ -54,6 +54,17 @@
 	    </query>
 	</named-query>
 	
+	<named-query name="Client.hasPaidInvoices">
+	    <query>
+	        <![CDATA[
+	        select count(ch)
+	        from Charge ch
+	        where ch.paymentMean.client.id = ?1
+	          and ch.invoice.state = uo.ri.cws.domain.Invoice$InvoiceState.PAID
+	        ]]>
+	    </query>
+	</named-query>
+	
 	<!-- CreditCard queries -->
 	<named-query name="CreditCard.findByNumber">
 	    <query>
