@@ -5,6 +5,7 @@ import java.util.List;
 import uo.ri.conf.Factories;
 import uo.ri.cws.application.service.paymentmean.VoucherGenerationService;
 import uo.ri.cws.application.service.paymentmean.voucher.commands.FindVouchersByClientNif;
+import uo.ri.cws.application.service.paymentmean.voucher.commands.GenerateInvoiceVouchers;
 import uo.ri.cws.application.service.paymentmean.voucher.commands.GenerateRecommendationVouchers;
 import uo.ri.cws.application.service.paymentmean.voucher.commands.GenerateWorkOrderVouchers;
 import uo.ri.cws.application.service.paymentmean.voucher.commands.GetVoucherSummary;
@@ -21,6 +22,7 @@ public class VoucherGenerationServiceImpl implements VoucherGenerationService {
 
 		counters[0] = executor.execute(new GenerateWorkOrderVouchers());
 		counters[1] = executor.execute(new GenerateRecommendationVouchers());
+		counters[2] = executor.execute(new GenerateInvoiceVouchers());
 
 		return counters;
 	}
