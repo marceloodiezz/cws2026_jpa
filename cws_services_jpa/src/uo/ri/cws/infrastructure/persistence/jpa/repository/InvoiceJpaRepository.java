@@ -13,7 +13,8 @@ public class InvoiceJpaRepository extends BaseJpaRepository<Invoice> implements 
 
 	@Override
 	public Optional<Invoice> findByNumber(Long number) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return Jpa.getManager().createNamedQuery("Invoice.findByNumber", Invoice.class).setParameter(1, number)
+				.getResultStream().findFirst();
 	}
 
 	@Override
