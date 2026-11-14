@@ -122,6 +122,14 @@
 	</named-query>
 
 	<!-- PaymentMean queries -->
+	<named-query name="PaymentMean.findByIds">
+	    <query>
+	        select pm
+	        from PaymentMean pm
+	        where pm.id in ?1
+	    </query>
+	</named-query>
+
 	<named-query name="PaymentMean.findByInvoiceId">
 	    <query>
 	        select m

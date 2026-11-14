@@ -11,6 +11,7 @@ import uo.ri.cws.application.service.invoice.create.commands.CreateInvoiceFor;
 import uo.ri.cws.application.service.invoice.create.commands.FindInvoiceByNumber;
 import uo.ri.cws.application.service.invoice.create.commands.FindNotInvoicedWorkOrdersByClientNif;
 import uo.ri.cws.application.service.invoice.create.commands.FindPayMeansByClientNif;
+import uo.ri.cws.application.service.invoice.create.commands.SettleInvoice;
 import uo.ri.cws.application.util.command.CommandExecutor;
 import uo.ri.util.exception.BusinessException;
 
@@ -50,7 +51,7 @@ public class InvoicingServiceImpl implements InvoicingService {
 
 	@Override
 	public void settleInvoice(String invoiceId, Map<String, BigDecimal> charges) throws BusinessException {
-		throw new UnsupportedOperationException("Not yet implemented");
+		executor.execute(new SettleInvoice(invoiceId, charges));
 	}
 
 }

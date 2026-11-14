@@ -42,7 +42,8 @@ public class PaymentMeanJpaRepository extends BaseJpaRepository<PaymentMean> imp
 
 	@Override
 	public List<PaymentMean> findByIds(Collection<String> ids) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return Jpa.getManager().createNamedQuery("PaymentMean.findByIds", PaymentMean.class).setParameter(1, ids)
+				.getResultList();
 	}
 
 }
