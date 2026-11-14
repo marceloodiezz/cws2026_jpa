@@ -90,16 +90,19 @@
 -->
 	</named-query>
 
+	
 	<named-query name="Invoice.findOverAmountUnusedForVoucher">
-		<query>
-			<![CDATA[
-			select invoice
-			from Invoice invoice
-			where invoice.total.amount > ?1
-				and invoice.usedForVoucher = false
-			]]>
-		</query>
+	    <query>
+	        <![CDATA[
+	        select invoice
+	        from Invoice invoice
+	        where invoice.total.amount > ?1
+	          and invoice.state = uo.ri.cws.domain.Invoice$InvoiceState.PAID
+	          and invoice.usedForVoucher = false
+	        ]]>
+	    </query>
 	</named-query>
+
 
 	<!-- Mechanic queries -->
 	<named-query name="Mechanic.findByNif">
@@ -119,6 +122,14 @@
 	</named-query>
 
 	<!-- PaymentMean queries -->
+	<named-query name="PaymentMean.findByIds">
+	    <query>
+	        select pm
+	        from PaymentMean pm
+	        where pm.id in ?1
+	    </query>
+	</named-query>
+
 	<named-query name="PaymentMean.findByInvoiceId">
 	    <query>
 	        select m
