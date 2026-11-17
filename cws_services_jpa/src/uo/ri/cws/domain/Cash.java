@@ -5,28 +5,28 @@ import uo.ri.util.assertion.ArgumentChecks;
 
 public class Cash extends PaymentMean {
 
-	// ---- Constructors ----
+    // ---- Constructors ----
 
-	Cash() {
-	}
+    Cash() {
+    }
 
-	public Cash(Client client) {
-		ArgumentChecks.isNotNull(client, "Client cannot be null");
+    public Cash(Client client) {
+        ArgumentChecks.isNotNull(client, "Client cannot be null");
 
-		Associations.Holds.link(client, this);
-	}
+        Associations.Holds.link(client, this);
+    }
 
-	// ---- Business methods ----
-	@Override
-	public boolean canBeCharged(Money amount) {
-		checkPositive(amount);
-		return true;
-	}
+    // ---- Business methods ----
+    @Override
+    public boolean canBeCharged(Money amount) {
+        checkPositive(amount);
+        return true;
+    }
 
-	// ---- toString ----
-	@Override
-	public String toString() {
-		return "Cash [accumulated=" + getAccumulated() + ", client=" + getClient() + "]";
-	}
+    // ---- toString ----
+    @Override
+    public String toString() {
+        return "Cash [accumulated=" + getAccumulated() + ", client=" + getClient() + "]";
+    }
 
 }

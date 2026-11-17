@@ -19,51 +19,51 @@ import uo.ri.util.exception.BusinessException;
 
 public class DeleteClientByNif implements Command<Void> {
 
-	private Nif nif;
+    private Nif nif;
 
-	private ClientRepository clientRepo = Factories.repository.forClient();
-	private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
-	private RecommendationRepository recommendationRepo = Factories.repository.forRecommendation();
+    private ClientRepository clientRepo = Factories.repository.forClient();
+    private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
+    private RecommendationRepository recommendationRepo = Factories.repository.forRecommendation();
 
-	private ClientQueries query = Factories.query.forClient();
+    private ClientQueries query = Factories.query.forClient();
 
-	public DeleteClientByNif(String nif) {
-		ArgumentChecks.isNotBlank(nif, "The client nif cannot be blank");
+    public DeleteClientByNif(String nif) {
+        ArgumentChecks.isNotBlank(nif, "The client nif cannot be blank");
 
-		this.nif = new Nif(nif);
-	}
+        this.nif = new Nif(nif);
+    }
 
-	@Override
-	public Void execute() throws BusinessException {
-		Optional<Client> oc = clientRepo.findByNif(nif);
+    @Override
+    public Void execute() throws BusinessException {
+        Optional<Client> oc = clientRepo.findByNif(nif);
 
-		BusinessChecks.exists(oc, "The client does not exist");
+        BusinessChecks.exists(oc, "The client does not exist");
 
-		Client client = oc.get();
+        Client client = oc.get();
 
-		BusinessChecks.isTrue(client.getVehicles().isEmpty(), "The client has vehicles and cannot be deleted");
-		BusinessChecks.isFalse(query.hasPaidInvoices(client.getId()),
-				"The client has paid invoices and cannot be deleted");
+        BusinessChecks.isTrue(client.getVehicles().isEmpty(), "The client has vehicles and cannot be deleted");
+        BusinessChecks.isFalse(query.hasPaidInvoices(client.getId()),
+            "The client has paid invoices and cannot be deleted");
 
-		for (PaymentMean paymentMean : client.getPaymentMeans()) {
-			Associations.Holds.unlink(paymentMean);
-			paymentMeanRepo.remove(paymentMean);
-		}
+        for (PaymentMean paymentMean : client.getPaymentMeans()) {
+            Associations.Holds.unlink(paymentMean);
+            paymentMeanRepo.remove(paymentMean);
+        }
 
-		for (Recommendation recommendation : client.getRecommendations()) {
-			Associations.Recommends.unlink(recommendation);
-			recommendationRepo.remove(recommendation);
-		}
+        for (Recommendation recommendation : client.getRecommendations()) {
+            Associations.Recommends.unlink(recommendation);
+            recommendationRepo.remove(recommendation);
+        }
 
-		Recommendation received = client.getRecommendation();
-		if (received != null) {
-			Associations.Recommends.unlink(received);
-			recommendationRepo.remove(received);
-		}
+        Recommendation received = client.getRecommendation();
+        if (received != null) {
+            Associations.Recommends.unlink(received);
+            recommendationRepo.remove(received);
+        }
 
-		clientRepo.remove(client);
+        clientRepo.remove(client);
 
-		return null;
-	}
+        return null;
+    }
 
 }

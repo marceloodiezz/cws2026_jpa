@@ -13,19 +13,19 @@ import uo.ri.util.exception.BusinessException;
 
 public class FindPaymentMeanById implements Command<Optional<PaymentMeanDto>> {
 
-	private String id;
+    private String id;
 
-	private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
+    private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
 
-	public FindPaymentMeanById(String id) {
-		ArgumentChecks.isNotBlank(id);
-		this.id = id;
-	}
+    public FindPaymentMeanById(String id) {
+        ArgumentChecks.isNotBlank(id);
+        this.id = id;
+    }
 
-	@Override
-	public Optional<PaymentMeanDto> execute() throws BusinessException {
-		Optional<PaymentMean> paymentMean = paymentMeanRepo.findById(id);
+    @Override
+    public Optional<PaymentMeanDto> execute() throws BusinessException {
+        Optional<PaymentMean> paymentMean = paymentMeanRepo.findById(id);
 
-		return paymentMean.map(DtoAssembler::toDto);
-	}
+        return paymentMean.map(DtoAssembler::toDto);
+    }
 }

@@ -8,16 +8,12 @@ import uo.ri.cws.domain.types.LicensePlate;
 import uo.ri.cws.infrastructure.persistence.jpa.util.BaseJpaRepository;
 import uo.ri.cws.infrastructure.persistence.jpa.util.Jpa;
 
-public class VehicleJpaRepository extends BaseJpaRepository<Vehicle>
-	implements VehicleRepository {
+public class VehicleJpaRepository extends BaseJpaRepository<Vehicle> implements VehicleRepository {
 
-	@Override
-	public Optional<Vehicle> findByPlate(LicensePlate plate) {
-		return Jpa.getManager()
-				.createNamedQuery("Vehicle.findByPlate", Vehicle.class)
-				.setParameter(1, plate)
-				.getResultList().stream()
-				.findFirst();
-	}
+    @Override
+    public Optional<Vehicle> findByPlate(LicensePlate plate) {
+        return Jpa.getManager().createNamedQuery("Vehicle.findByPlate", Vehicle.class).setParameter(1, plate)
+            .getResultList().stream().findFirst();
+    }
 
 }

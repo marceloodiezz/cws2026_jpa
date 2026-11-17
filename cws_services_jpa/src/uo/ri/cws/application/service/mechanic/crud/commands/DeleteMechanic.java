@@ -13,31 +13,31 @@ import uo.ri.util.exception.BusinessException;
 
 public class DeleteMechanic implements Command<Void> {
 
-	private String mechanicId;
-	private MechanicRepository repo = Factories.repository.forMechanic();
-	private MechanicQueries query = Factories.query.forMechanic();
+    private String mechanicId;
+    private MechanicRepository repo = Factories.repository.forMechanic();
+    private MechanicQueries query = Factories.query.forMechanic();
 
-	public DeleteMechanic(String mechanicId) {
-		ArgumentChecks.isNotBlank(mechanicId, "The mechanic id cannot be empty");
+    public DeleteMechanic(String mechanicId) {
+        ArgumentChecks.isNotBlank(mechanicId, "The mechanic id cannot be empty");
 
-		this.mechanicId = mechanicId;
-	}
+        this.mechanicId = mechanicId;
+    }
 
-	@Override
-	public Void execute() throws BusinessException {
+    @Override
+    public Void execute() throws BusinessException {
 
-		Optional<Mechanic> om = repo.findById(mechanicId);
+        Optional<Mechanic> om = repo.findById(mechanicId);
 
-		BusinessChecks.exists(om, "The mechanic does not exist");
+        BusinessChecks.exists(om, "The mechanic does not exist");
 
-		Mechanic m = om.get();
+        Mechanic m = om.get();
 
-		BusinessChecks.isTrue(m.getAssigned().isEmpty(), "The mechanic has assigned interventions");
-		BusinessChecks.isFalse(query.hasInterventions(mechanicId), "The mechanic has interventions done");
+        BusinessChecks.isTrue(m.getAssigned().isEmpty(), "The mechanic has assigned interventions");
+        BusinessChecks.isFalse(query.hasInterventions(mechanicId), "The mechanic has interventions done");
 
-		repo.remove(m);
+        repo.remove(m);
 
-		return null;
-	}
+        return null;
+    }
 
 }

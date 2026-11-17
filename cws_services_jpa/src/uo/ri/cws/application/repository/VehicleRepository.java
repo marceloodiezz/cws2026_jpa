@@ -7,6 +7,6 @@ import uo.ri.cws.domain.types.LicensePlate;
 
 public interface VehicleRepository extends Repository<Vehicle> {
 
-	Optional<Vehicle> findByPlate(LicensePlate plate);
+    Optional<Vehicle> findByPlate(LicensePlate plate);
 
 }

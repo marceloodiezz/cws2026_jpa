@@ -15,31 +15,31 @@ import uo.ri.util.exception.BusinessException;
 
 public class GenerateRecommendationVouchers implements Command<Integer> {
 
-	private ClientRepository clientRepo = Factories.repository.forClient();
+    private ClientRepository clientRepo = Factories.repository.forClient();
 
-	private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
+    private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
 
-	@Override
-	public Integer execute() throws BusinessException {
+    @Override
+    public Integer execute() throws BusinessException {
 
-		int generated = 0;
+        int generated = 0;
 
-		List<Client> clients = clientRepo.findWithRecommendationsUnusedForVoucher(3);
+        List<Client> clients = clientRepo.findWithRecommendationsUnusedForVoucher(3);
 
-		for (Client client : clients) {
-			while (client.isEligibleForVoucher25()) {
-				Voucher voucher = new Voucher(VoucherCode.generate(), "Por recomendación", Money.of("25.00"));
+        for (Client client : clients) {
+            while (client.isEligibleForVoucher25()) {
+                Voucher voucher = new Voucher(VoucherCode.generate(), "Por recomendación", Money.of("25.00"));
 
-				Associations.Holds.link(client, voucher);
+                Associations.Holds.link(client, voucher);
 
-				paymentMeanRepo.add(voucher);
+                paymentMeanRepo.add(voucher);
 
-				client.markThreeRecommendationsAsUsedForVoucher25();
+                client.markThreeRecommendationsAsUsedForVoucher25();
 
-				generated++;
-			}
-		}
+                generated++;
+            }
+        }
 
-		return generated;
-	}
+        return generated;
+    }
 }

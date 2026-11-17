@@ -6,14 +6,12 @@ import uo.ri.util.assertion.ArgumentChecks;
 
 public class MechanicJpaQueries implements MechanicQueries {
 
-	@Override
-	public boolean hasInterventions(String mechanicId) {
-		ArgumentChecks.isNotEmpty(mechanicId);
+    @Override
+    public boolean hasInterventions(String mechanicId) {
+        ArgumentChecks.isNotEmpty(mechanicId);
 
-		return 0 < Jpa.getManager()
-				.createNamedQuery("Mechanic.countInterventions", Long.class)
-				.setParameter(1, mechanicId)
-				.getSingleResult();
-	}
+        return 0 < Jpa.getManager().createNamedQuery("Mechanic.countInterventions", Long.class)
+            .setParameter(1, mechanicId).getSingleResult();
+    }
 
 }

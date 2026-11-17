@@ -22,67 +22,67 @@ import uo.ri.util.exception.BusinessException;
 
 public class AddClient implements Command<ClientDto> {
 
-	private ClientDto client;
-	private String recommenderNif;
+    private ClientDto client;
+    private String recommenderNif;
 
-	private ClientRepository clientRepo = Factories.repository.forClient();
-	private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
-	private RecommendationRepository recommendationRepo = Factories.repository.forRecommendation();
+    private ClientRepository clientRepo = Factories.repository.forClient();
+    private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
+    private RecommendationRepository recommendationRepo = Factories.repository.forRecommendation();
 
-	public AddClient(ClientDto client, String recommenderNif) {
-		ArgumentChecks.isNotNull(client, "The client cannot be null");
+    public AddClient(ClientDto client, String recommenderNif) {
+        ArgumentChecks.isNotNull(client, "The client cannot be null");
 
-		ArgumentChecks.isNotBlank(client.nif, "The nif cannot be blank");
-		ArgumentChecks.isNotBlank(client.name, "The name cannot be blank");
-		ArgumentChecks.isNotBlank(client.surname, "The surname cannot be blank");
-		ArgumentChecks.isNotBlank(client.email, "The email cannot be blank");
-		ArgumentChecks.isNotBlank(client.phone, "The phone cannot be blank");
+        ArgumentChecks.isNotBlank(client.nif, "The nif cannot be blank");
+        ArgumentChecks.isNotBlank(client.name, "The name cannot be blank");
+        ArgumentChecks.isNotBlank(client.surname, "The surname cannot be blank");
+        ArgumentChecks.isNotBlank(client.email, "The email cannot be blank");
+        ArgumentChecks.isNotBlank(client.phone, "The phone cannot be blank");
 
-		ArgumentChecks.isNotBlank(client.addressStreet, "The street cannot be blank");
-		ArgumentChecks.isNotBlank(client.addressCity, "The city cannot be blank");
-		ArgumentChecks.isNotBlank(client.addressCountry, "The country cannot be blank");
-		ArgumentChecks.isNotBlank(client.addressZipcode, "The zipcode cannot be blank");
+        ArgumentChecks.isNotBlank(client.addressStreet, "The street cannot be blank");
+        ArgumentChecks.isNotBlank(client.addressCity, "The city cannot be blank");
+        ArgumentChecks.isNotBlank(client.addressCountry, "The country cannot be blank");
+        ArgumentChecks.isNotBlank(client.addressZipcode, "The zipcode cannot be blank");
 
-		if (recommenderNif != null) {
-			ArgumentChecks.isNotBlank(recommenderNif, "The recommender nif cannot be blank");
-		}
+        if (recommenderNif != null) {
+            ArgumentChecks.isNotBlank(recommenderNif, "The recommender nif cannot be blank");
+        }
 
-		this.client = client;
-		this.recommenderNif = recommenderNif;
-	}
+        this.client = client;
+        this.recommenderNif = recommenderNif;
+    }
 
-	@Override
-	public ClientDto execute() throws BusinessException {
-		Nif nif = new Nif(client.nif);
+    @Override
+    public ClientDto execute() throws BusinessException {
+        Nif nif = new Nif(client.nif);
 
-		if (clientRepo.findByNif(nif).isPresent()) {
-			throw new BusinessException("A client with this nif already exists");
-		}
+        if (clientRepo.findByNif(nif).isPresent()) {
+            throw new BusinessException("A client with this nif already exists");
+        }
 
-		if (recommenderNif != null) {
-			Optional<Client> recommender = clientRepo.findByNif(new Nif(recommenderNif));
+        if (recommenderNif != null) {
+            Optional<Client> recommender = clientRepo.findByNif(new Nif(recommenderNif));
 
-			if (recommender.isEmpty()) {
-				throw new BusinessException("The recommender does not exist");
-			}
-		}
+            if (recommender.isEmpty()) {
+                throw new BusinessException("The recommender does not exist");
+            }
+        }
 
-		Client newClient = new Client(nif, new FullName(client.name, client.surname), new Email(client.email),
-				new PhoneNumber(client.phone),
-				new Address(client.addressStreet, client.addressCity, client.addressCountry, client.addressZipcode));
+        Client newClient = new Client(nif, new FullName(client.name, client.surname), new Email(client.email),
+            new PhoneNumber(client.phone),
+            new Address(client.addressStreet, client.addressCity, client.addressCountry, client.addressZipcode));
 
-		clientRepo.add(newClient);
+        clientRepo.add(newClient);
 
-		Cash cash = new Cash(newClient);
-		paymentMeanRepo.add(cash);
+        Cash cash = new Cash(newClient);
+        paymentMeanRepo.add(cash);
 
-		if (recommenderNif != null) {
-			Client recommender = clientRepo.findByNif(new Nif(recommenderNif)).get();
-			Recommendation recommendation = new Recommendation(recommender, newClient);
-			recommendationRepo.add(recommendation);
-		}
+        if (recommenderNif != null) {
+            Client recommender = clientRepo.findByNif(new Nif(recommenderNif)).get();
+            Recommendation recommendation = new Recommendation(recommender, newClient);
+            recommendationRepo.add(recommendation);
+        }
 
-		return DtoAssembler.toDto(newClient);
-	}
+        return DtoAssembler.toDto(newClient);
+    }
 
 }

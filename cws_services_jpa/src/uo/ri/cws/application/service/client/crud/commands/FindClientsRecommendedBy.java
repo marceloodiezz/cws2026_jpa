@@ -14,21 +14,21 @@ import uo.ri.util.exception.BusinessException;
 
 public class FindClientsRecommendedBy implements Command<List<ClientDto>> {
 
-	private Nif recommenderNif;
+    private Nif recommenderNif;
 
-	private ClientRepository repo = Factories.repository.forClient();
+    private ClientRepository repo = Factories.repository.forClient();
 
-	public FindClientsRecommendedBy(String recommenderNif) {
-		ArgumentChecks.isNotBlank(recommenderNif, "The recommender nif cannot be blank");
+    public FindClientsRecommendedBy(String recommenderNif) {
+        ArgumentChecks.isNotBlank(recommenderNif, "The recommender nif cannot be blank");
 
-		this.recommenderNif = new Nif(recommenderNif);
-	}
+        this.recommenderNif = new Nif(recommenderNif);
+    }
 
-	@Override
-	public List<ClientDto> execute() throws BusinessException {
-		List<Client> clients = repo.findRecommendedBy(recommenderNif);
+    @Override
+    public List<ClientDto> execute() throws BusinessException {
+        List<Client> clients = repo.findRecommendedBy(recommenderNif);
 
-		return DtoAssembler.toDtoList(clients);
-	}
+        return DtoAssembler.toDtoList(clients);
+    }
 
 }

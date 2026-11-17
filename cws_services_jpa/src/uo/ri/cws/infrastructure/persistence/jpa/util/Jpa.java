@@ -17,63 +17,65 @@ import jakarta.persistence.Persistence;
 
 public class Jpa {
 
-	private static volatile EntityManagerFactory emf = null;
-	private static ThreadLocal<EntityManager> emThread = new ThreadLocal<EntityManager>();
-	
-	public static EntityManager createEntityManager() {
-		EntityManager entityManager = getEmf().createEntityManager();
-		emThread.set(entityManager);
-		return entityManager;
-	}
+    private static volatile EntityManagerFactory emf = null;
+    private static ThreadLocal<EntityManager> emThread = new ThreadLocal<EntityManager>();
 
-	public static EntityManager getManager() {
-		return emThread.get();
-	}
+    public static EntityManager createEntityManager() {
+        EntityManager entityManager = getEmf().createEntityManager();
+        emThread.set(entityManager);
+        return entityManager;
+    }
 
-	public synchronized static void close() {
-		if (emf == null) {
-			return;
-		}
-		if (emf.isOpen()) {
-			emf.close();
-		}
-		emf = null;
-	}
+    public static EntityManager getManager() {
+        return emThread.get();
+    }
 
-	private static EntityManagerFactory getEmf() {
-		if (emf == null){
-			// Avoids the remote possibility of multiple initialization in a concurrent environment
-			// emf field must be volatile for this to work
-			// Be careful this does not work under Java 1.4
-			synchronized(Jpa.class) {
-				if (emf == null) {  // double-check pattern 
-					String name = loadPersistentUnitName();
-					emf = Persistence.createEntityManagerFactory(name);
-				}
-			}
-		}
-		return emf;
-	}
+    public synchronized static void close() {
+        if (emf == null) {
+            return;
+        }
+        if (emf.isOpen()) {
+            emf.close();
+        }
+        emf = null;
+    }
 
-	/**
-	 * Loads the name of the persistence unit from the persistence.xml file
-	 * Warning: the persistence.xml file must be in /META-INF/ folder of the classpath
-	 * @return the name of the persistence unit
-	 */
-	private static String loadPersistentUnitName() {
-		try {
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse(Jpa.class.getResourceAsStream("/META-INF/persistence.xml"));
+    private static EntityManagerFactory getEmf() {
+        if (emf == null) {
+            // Avoids the remote possibility of multiple initialization in a concurrent
+            // environment
+            // emf field must be volatile for this to work
+            // Be careful this does not work under Java 1.4
+            synchronized (Jpa.class) {
+                if (emf == null) { // double-check pattern
+                    String name = loadPersistentUnitName();
+                    emf = Persistence.createEntityManagerFactory(name);
+                }
+            }
+        }
+        return emf;
+    }
 
-			doc.getDocumentElement().normalize();
-			NodeList nl = doc.getElementsByTagName("persistence-unit");
-			
-			return ((Element)nl.item(0)).getAttribute("name");
+    /**
+     * Loads the name of the persistence unit from the persistence.xml file Warning:
+     * the persistence.xml file must be in /META-INF/ folder of the classpath
+     *
+     * @return the name of the persistence unit
+     */
+    private static String loadPersistentUnitName() {
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(Jpa.class.getResourceAsStream("/META-INF/persistence.xml"));
 
-		} catch (ParserConfigurationException | SAXException | IOException e1) {
-			throw new RuntimeException(e1);
-		}
-	}
+            doc.getDocumentElement().normalize();
+            NodeList nl = doc.getElementsByTagName("persistence-unit");
+
+            return ((Element) nl.item(0)).getAttribute("name");
+
+        } catch (ParserConfigurationException | SAXException | IOException e1) {
+            throw new RuntimeException(e1);
+        }
+    }
 
 }

@@ -14,19 +14,19 @@ import uo.ri.util.exception.BusinessException;
 
 public class FindNotInvoicedWorkOrdersByClientNif implements Command<List<InvoicingWorkOrderDto>> {
 
-	private Nif nif;
-	private WorkOrderRepository repo = Factories.repository.forWorkOrder();
+    private Nif nif;
+    private WorkOrderRepository repo = Factories.repository.forWorkOrder();
 
-	public FindNotInvoicedWorkOrdersByClientNif(String nif) {
-		ArgumentChecks.isNotBlank(nif, "The client nif cannot be null or blank");
+    public FindNotInvoicedWorkOrdersByClientNif(String nif) {
+        ArgumentChecks.isNotBlank(nif, "The client nif cannot be null or blank");
 
-		this.nif = new Nif(nif);
-	}
+        this.nif = new Nif(nif);
+    }
 
-	@Override
-	public List<InvoicingWorkOrderDto> execute() throws BusinessException {
-		List<WorkOrder> workOrders = repo.findNotInvoicedByClientNif(nif);
-		return DtoAssembler.toInvoicingWorkOrderDtoList(workOrders);
-	}
+    @Override
+    public List<InvoicingWorkOrderDto> execute() throws BusinessException {
+        List<WorkOrder> workOrders = repo.findNotInvoicedByClientNif(nif);
+        return DtoAssembler.toInvoicingWorkOrderDtoList(workOrders);
+    }
 
 }

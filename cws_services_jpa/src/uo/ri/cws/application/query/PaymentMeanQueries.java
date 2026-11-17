@@ -6,7 +6,7 @@ import uo.ri.cws.application.service.paymentmean.VoucherGenerationService.Vouche
 
 public interface PaymentMeanQueries {
 
-	boolean hasCharges(String paymentMeanId);
+    boolean hasCharges(String paymentMeanId);
 
-	List<VoucherSummaryDto> getVouchersSummary();
+    List<VoucherSummaryDto> getVouchersSummary();
 }

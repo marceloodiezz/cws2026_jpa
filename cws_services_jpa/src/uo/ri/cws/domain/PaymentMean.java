@@ -7,79 +7,79 @@ import uo.ri.util.assertion.StateChecks;
 
 public abstract class PaymentMean extends BaseEntity {
 
-	// Natural attributes
-	private Money accumulated = Money.ZERO; // cents
+    // Natural attributes
+    private Money accumulated = Money.ZERO; // cents
 
-	// Accidental attributes
-	private Client client;
+    // Accidental attributes
+    private Client client;
 
-	PaymentMean() {
-	}
+    PaymentMean() {
+    }
 
-	// ---- Association helpers ----
+    // ---- Association helpers ----
 
-	void _setClient(Client client) {
-		this.client = client;
-	}
+    void _setClient(Client client) {
+        this.client = client;
+    }
 
-	// ---- Business methods ----
+    // ---- Business methods ----
 
-	public abstract boolean canBeCharged(Money amount);
+    public abstract boolean canBeCharged(Money amount);
 
-	/**
-	 * Increments the accumulated amount of the payment mean by the given amount.
-	 * package-private Only called from Charge constructor.
-	 * 
-	 * @param amount
-	 */
-	/* package */ void charge(Money amount) {
-		// Normalize the amount to cents
-		Money normalizedAmount = normalizePositive(amount);
+    /**
+     * Increments the accumulated amount of the payment mean by the given amount.
+     * package-private Only called from Charge constructor.
+     *
+     * @param amount
+     */
+    /* package */ void charge(Money amount) {
+        // Normalize the amount to cents
+        Money normalizedAmount = normalizePositive(amount);
 
-		// check if it can be charged
-		StateChecks.isTrue(canBeCharged(normalizedAmount), "Payment mean cannot be charged");
+        // check if it can be charged
+        StateChecks.isTrue(canBeCharged(normalizedAmount), "Payment mean cannot be charged");
 
-		// increment the accumulated amount
-		accumulated = Money.calc(accumulated).add(normalizedAmount).toMoneyRoundedToCents();
-	}
+        // increment the accumulated amount
+        accumulated = Money.calc(accumulated).add(normalizedAmount).toMoneyRoundedToCents();
+    }
 
-	/**
-	 * Decrements the accumulated amount of the payment mean by the given amount.
-	 * package-private Only called from Charge.rewind().
-	 * 
-	 * @param amount
-	 */
-	/* package */ void rewind(Money amount) {
-		Money normalizedAmount = normalizePositive(amount);
+    /**
+     * Decrements the accumulated amount of the payment mean by the given amount.
+     * package-private Only called from Charge.rewind().
+     *
+     * @param amount
+     */
+    /* package */ void rewind(Money amount) {
+        Money normalizedAmount = normalizePositive(amount);
 
-		StateChecks.isTrue(accumulated.greaterOrEqual(normalizedAmount), "Insufficient accumulated amount");
+        StateChecks.isTrue(accumulated.greaterOrEqual(normalizedAmount), "Insufficient accumulated amount");
 
-		accumulated = Money.calc(accumulated).subtract(normalizedAmount).toMoneyRoundedToCents();
-	}
+        accumulated = Money.calc(accumulated).subtract(normalizedAmount).toMoneyRoundedToCents();
+    }
 
-	public Client getClient() {
-		return client;
-	}
+    public Client getClient() {
+        return client;
+    }
 
-	public Money getAccumulated() {
-		return accumulated;
-	}
+    public Money getAccumulated() {
+        return accumulated;
+    }
 
-	protected static void checkPositive(Money amount) {
-		ArgumentChecks.isNotNull(amount, "Amount cannot be null");
-		ArgumentChecks.isTrue(amount.greaterThan(Money.ZERO), "Amount must be positive");
-	}
+    protected static void checkPositive(Money amount) {
+        ArgumentChecks.isNotNull(amount, "Amount cannot be null");
+        ArgumentChecks.isTrue(amount.greaterThan(Money.ZERO), "Amount must be positive");
+    }
 
-	protected static Money normalizePositive(Money amount) {
-		ArgumentChecks.isNotNull(amount, "Amount cannot be null");
-		Money result = Money.calc(amount).toMoneyRoundedToCents();
-		checkPositive(result);
-		return result;
-	}
+    protected static Money normalizePositive(Money amount) {
+        ArgumentChecks.isNotNull(amount, "Amount cannot be null");
+        Money result = Money.calc(amount).toMoneyRoundedToCents();
+        checkPositive(result);
+        return result;
+    }
 
-	@Override
-	public String toString() {
-		return "PaymentMean [accumulated=" + accumulated + "]";
-	}
+    @Override
+    public String toString() {
+        return "PaymentMean [accumulated=" + accumulated + "]";
+    }
 
 }

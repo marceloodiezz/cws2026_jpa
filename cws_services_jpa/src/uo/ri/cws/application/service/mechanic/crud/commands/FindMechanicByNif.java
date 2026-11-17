@@ -11,19 +11,19 @@ import uo.ri.cws.domain.types.Nif;
 import uo.ri.util.assertion.ArgumentChecks;
 import uo.ri.util.exception.BusinessException;
 
-public class FindMechanicByNif implements Command<Optional<MechanicDto>>{
+public class FindMechanicByNif implements Command<Optional<MechanicDto>> {
 
-	private Nif nif;
-	private MechanicRepository repo = Factories.repository.forMechanic();
+    private Nif nif;
+    private MechanicRepository repo = Factories.repository.forMechanic();
 
-	public FindMechanicByNif(String nif) {
-		ArgumentChecks.isNotBlank( nif, "Nif cannot be null or blank" );
-		this.nif = new Nif(nif);
-	}
+    public FindMechanicByNif(String nif) {
+        ArgumentChecks.isNotBlank(nif, "Nif cannot be null or blank");
+        this.nif = new Nif(nif);
+    }
 
-	@Override
-	public Optional<MechanicDto> execute() throws BusinessException {
-		return repo.findByNif( nif ).map( m -> DtoAssembler.toDto( m ) );
-	}
+    @Override
+    public Optional<MechanicDto> execute() throws BusinessException {
+        return repo.findByNif(nif).map(m -> DtoAssembler.toDto(m));
+    }
 
 }

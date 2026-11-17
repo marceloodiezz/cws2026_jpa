@@ -14,20 +14,20 @@ import uo.ri.util.exception.BusinessException;
 
 public class FindClientByNif implements Command<Optional<ClientDto>> {
 
-	private Nif nif;
+    private Nif nif;
 
-	private ClientRepository repo = Factories.repository.forClient();
+    private ClientRepository repo = Factories.repository.forClient();
 
-	public FindClientByNif(String nif) {
-		ArgumentChecks.isNotBlank(nif, "The client nif cannot be blank");
+    public FindClientByNif(String nif) {
+        ArgumentChecks.isNotBlank(nif, "The client nif cannot be blank");
 
-		this.nif = new Nif(nif);
-	}
+        this.nif = new Nif(nif);
+    }
 
-	@Override
-	public Optional<ClientDto> execute() throws BusinessException {
-		Optional<Client> client = repo.findByNif(nif);
+    @Override
+    public Optional<ClientDto> execute() throws BusinessException {
+        Optional<Client> client = repo.findByNif(nif);
 
-		return client.map(DtoAssembler::toDto);
-	}
+        return client.map(DtoAssembler::toDto);
+    }
 }

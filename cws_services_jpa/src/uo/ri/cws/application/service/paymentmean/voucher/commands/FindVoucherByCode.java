@@ -13,19 +13,19 @@ import uo.ri.util.exception.BusinessException;
 
 public class FindVoucherByCode implements Command<Optional<VoucherDto>> {
 
-	private String code;
+    private String code;
 
-	private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
+    private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
 
-	public FindVoucherByCode(String code) {
-		ArgumentChecks.isNotBlank(code);
-		this.code = code;
-	}
+    public FindVoucherByCode(String code) {
+        ArgumentChecks.isNotBlank(code);
+        this.code = code;
+    }
 
-	@Override
-	public Optional<VoucherDto> execute() throws BusinessException {
-		VoucherCode voucherCode = new VoucherCode(code);
+    @Override
+    public Optional<VoucherDto> execute() throws BusinessException {
+        VoucherCode voucherCode = new VoucherCode(code);
 
-		return paymentMeanRepo.findVoucherByCode(voucherCode).map(DtoAssembler::toDto);
-	}
+        return paymentMeanRepo.findVoucherByCode(voucherCode).map(DtoAssembler::toDto);
+    }
 }

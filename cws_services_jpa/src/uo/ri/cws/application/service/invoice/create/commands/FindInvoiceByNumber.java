@@ -13,19 +13,19 @@ import uo.ri.util.exception.BusinessException;
 
 public class FindInvoiceByNumber implements Command<Optional<InvoiceDto>> {
 
-	private Long number;
+    private Long number;
 
-	private InvoiceRepository invoiceRepo = Factories.repository.forInvoice();
+    private InvoiceRepository invoiceRepo = Factories.repository.forInvoice();
 
-	public FindInvoiceByNumber(Long number) {
-		ArgumentChecks.isNotNull(number);
-		this.number = number;
-	}
+    public FindInvoiceByNumber(Long number) {
+        ArgumentChecks.isNotNull(number);
+        this.number = number;
+    }
 
-	@Override
-	public Optional<InvoiceDto> execute() throws BusinessException {
-		Optional<Invoice> invoice = invoiceRepo.findByNumber(number);
+    @Override
+    public Optional<InvoiceDto> execute() throws BusinessException {
+        Optional<Invoice> invoice = invoiceRepo.findByNumber(number);
 
-		return invoice.map(DtoAssembler::toDto);
-	}
+        return invoice.map(DtoAssembler::toDto);
+    }
 }

@@ -16,35 +16,35 @@ import uo.ri.util.exception.BusinessException;
 
 public class GenerateInvoiceVouchers implements Command<Integer> {
 
-	private InvoiceRepository invoiceRepo = Factories.repository.forInvoice();
-	private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
+    private InvoiceRepository invoiceRepo = Factories.repository.forInvoice();
+    private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
 
-	@Override
-	public Integer execute() throws BusinessException {
-		List<Invoice> invoices = invoiceRepo.findOverAmountUnusedForVoucher(Money.of("500.00"));
+    @Override
+    public Integer execute() throws BusinessException {
+        List<Invoice> invoices = invoiceRepo.findOverAmountUnusedForVoucher(Money.of("500.00"));
 
-		int generated = 0;
+        int generated = 0;
 
-		for (Invoice invoice : invoices) {
-			if (!invoice.canGenerateVoucher30()) {
-				continue;
-			}
+        for (Invoice invoice : invoices) {
+            if (!invoice.canGenerateVoucher30()) {
+                continue;
+            }
 
-			if (invoice.getWorkOrders().isEmpty()) {
-				continue;
-			}
+            if (invoice.getWorkOrders().isEmpty()) {
+                continue;
+            }
 
-			Client client = invoice.getWorkOrders().iterator().next().getVehicle().getClient();
-			Voucher voucher = new Voucher(VoucherCode.generate(), "Por factura de más de 500", Money.of("30.00"));
-			Associations.Holds.link(client, voucher);
+            Client client = invoice.getWorkOrders().iterator().next().getVehicle().getClient();
+            Voucher voucher = new Voucher(VoucherCode.generate(), "Por factura de más de 500", Money.of("30.00"));
+            Associations.Holds.link(client, voucher);
 
-			paymentMeanRepo.add(voucher);
+            paymentMeanRepo.add(voucher);
 
-			invoice.markAsUsedForVoucher();
+            invoice.markAsUsedForVoucher();
 
-			generated++;
-		}
+            generated++;
+        }
 
-		return generated;
-	}
+        return generated;
+    }
 }

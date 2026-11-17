@@ -12,19 +12,19 @@ import uo.ri.util.exception.BusinessException;
 
 public class FindMechanicById implements Command<Optional<MechanicDto>> {
 
-	private String id;
-	private MechanicRepository repo = Factories.repository.forMechanic();
+    private String id;
+    private MechanicRepository repo = Factories.repository.forMechanic();
 
-	public FindMechanicById(String id) {
-		ArgumentChecks.isNotBlank(id, "The mechanic id cannot be empty");
+    public FindMechanicById(String id) {
+        ArgumentChecks.isNotBlank(id, "The mechanic id cannot be empty");
 
-		this.id = id;
-	}
+        this.id = id;
+    }
 
-	@Override
-	public Optional<MechanicDto> execute() throws BusinessException {
+    @Override
+    public Optional<MechanicDto> execute() throws BusinessException {
 
-		return repo.findById(id).map(DtoAssembler::toDto);
-	}
+        return repo.findById(id).map(DtoAssembler::toDto);
+    }
 
 }

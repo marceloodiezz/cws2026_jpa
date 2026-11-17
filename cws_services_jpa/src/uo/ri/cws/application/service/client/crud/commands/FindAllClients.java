@@ -12,13 +12,13 @@ import uo.ri.util.exception.BusinessException;
 
 public class FindAllClients implements Command<List<ClientDto>> {
 
-	private ClientRepository repo = Factories.repository.forClient();
+    private ClientRepository repo = Factories.repository.forClient();
 
-	@Override
-	public List<ClientDto> execute() throws BusinessException {
-		List<Client> clients = repo.findAll();
+    @Override
+    public List<ClientDto> execute() throws BusinessException {
+        List<Client> clients = repo.findAll();
 
-		return DtoAssembler.toDtoList(clients);
-	}
+        return DtoAssembler.toDtoList(clients);
+    }
 
 }

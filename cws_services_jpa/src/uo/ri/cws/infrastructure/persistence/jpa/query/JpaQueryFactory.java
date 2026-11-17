@@ -8,24 +8,24 @@ import uo.ri.cws.application.query.QueryFactory;
 
 public class JpaQueryFactory implements QueryFactory {
 
-	@Override
-	public ClientQueries forClient() {
-		return new ClientJpaQueries();
-	}
+    @Override
+    public ClientQueries forClient() {
+        return new ClientJpaQueries();
+    }
 
-	@Override
-	public MechanicQueries forMechanic() {
-		return new MechanicJpaQueries();
-	}
+    @Override
+    public MechanicQueries forMechanic() {
+        return new MechanicJpaQueries();
+    }
 
-	@Override
-	public PaymentMeanQueries forPaymentMean() {
-		return new PaymentMeanJpaQueries();
-	}
+    @Override
+    public PaymentMeanQueries forPaymentMean() {
+        return new PaymentMeanJpaQueries();
+    }
 
-	@Override
-	public InvoiceQueries forInvoice() {
-		return new InvoiceJpaQueries();
-	}
+    @Override
+    public InvoiceQueries forInvoice() {
+        return new InvoiceJpaQueries();
+    }
 
 }

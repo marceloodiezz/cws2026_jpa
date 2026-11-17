@@ -15,38 +15,37 @@ import uo.ri.cws.application.util.command.CommandExecutor;
 import uo.ri.util.exception.BusinessException;
 
 public class MechanicCrudServiceImpl implements MechanicCrudService {
-	
-	private CommandExecutor executor = Factories.executor.forExecutor();
 
-	@Override
-	public MechanicDto create(MechanicDto mecanico) throws BusinessException {
-		return executor.execute( new AddMechanic( mecanico ) );
-	}
+    private CommandExecutor executor = Factories.executor.forExecutor();
 
-	@Override
-	public void update(MechanicDto mecanico) throws BusinessException {
-		executor.execute( new UpdateMechanic( mecanico ) );
-	}
+    @Override
+    public MechanicDto create(MechanicDto mecanico) throws BusinessException {
+        return executor.execute(new AddMechanic(mecanico));
+    }
 
-	@Override
-	public void delete(String idMecanico) throws BusinessException {
-		executor.execute( new DeleteMechanic(idMecanico) );
-	}
+    @Override
+    public void update(MechanicDto mecanico) throws BusinessException {
+        executor.execute(new UpdateMechanic(mecanico));
+    }
 
-	@Override
-	public List<MechanicDto> findAll() throws BusinessException {
-		return executor.execute( new FindAllMechanics() );
-	}
+    @Override
+    public void delete(String idMecanico) throws BusinessException {
+        executor.execute(new DeleteMechanic(idMecanico));
+    }
 
-	@Override
-	public Optional<MechanicDto> findById(String id) throws BusinessException {
-		return executor.execute( new FindMechanicById(id) );
-	}
+    @Override
+    public List<MechanicDto> findAll() throws BusinessException {
+        return executor.execute(new FindAllMechanics());
+    }
 
-	@Override
-	public Optional<MechanicDto> findByNif(String nif)
-			throws BusinessException {
-		return executor.execute( new FindMechanicByNif(nif) );
-	}
+    @Override
+    public Optional<MechanicDto> findById(String id) throws BusinessException {
+        return executor.execute(new FindMechanicById(id));
+    }
+
+    @Override
+    public Optional<MechanicDto> findByNif(String nif) throws BusinessException {
+        return executor.execute(new FindMechanicByNif(nif));
+    }
 
 }

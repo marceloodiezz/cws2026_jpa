@@ -7,77 +7,77 @@ import uo.ri.cws.domain.base.BaseEntity;
 
 public class Recommendation extends BaseEntity {
 
-	// Natural attributes
-	private boolean usedForVoucher = false;
+    // Natural attributes
+    private boolean usedForVoucher = false;
 
-	// Accidental attributes
-	private Client recommender;
-	private Client recommended;
+    // Accidental attributes
+    private Client recommender;
+    private Client recommended;
 
-	// ---- Constructors ----
+    // ---- Constructors ----
 
-	Recommendation() {
-	}
+    Recommendation() {
+    }
 
-	public Recommendation(Client recommender, Client recommended) {
-		Associations.Recommends.link(recommender, this, recommended);
-	}
+    public Recommendation(Client recommender, Client recommended) {
+        Associations.Recommends.link(recommender, this, recommended);
+    }
 
-	// ---- Getters ----
+    // ---- Getters ----
 
-	public boolean isUsedForVoucher() {
-		return usedForVoucher;
-	}
+    public boolean isUsedForVoucher() {
+        return usedForVoucher;
+    }
 
-	public Client getRecommender() {
-		return recommender;
-	}
+    public Client getRecommender() {
+        return recommender;
+    }
 
-	public Client getRecommended() {
-		return recommended;
-	}
+    public Client getRecommended() {
+        return recommended;
+    }
 
-	// ---- Association setters ----
+    // ---- Association setters ----
 
-	void _setRecommender(Client recommender) {
-		this.recommender = recommender;
-	}
+    void _setRecommender(Client recommender) {
+        this.recommender = recommender;
+    }
 
-	void _setRecommended(Client recommended) {
-		this.recommended = recommended;
-	}
+    void _setRecommended(Client recommended) {
+        this.recommended = recommended;
+    }
 
-	// ---- Domain methods ----
+    // ---- Domain methods ----
 
-	public void markAsUsedForVoucher() {
-		this.usedForVoucher = true;
-	}
+    public void markAsUsedForVoucher() {
+        this.usedForVoucher = true;
+    }
 
-	// ---- Object methods ----
+    // ---- Object methods ----
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
 
-		if (!(obj instanceof Recommendation)) {
-			return false;
-		}
+        if (!(obj instanceof Recommendation)) {
+            return false;
+        }
 
-		Recommendation other = (Recommendation) obj;
+        Recommendation other = (Recommendation) obj;
 
-		return Objects.equals(recommender, other.recommender) && Objects.equals(recommended, other.recommended);
-	}
+        return Objects.equals(recommender, other.recommender) && Objects.equals(recommended, other.recommended);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(recommender, recommended);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(recommender, recommended);
+    }
 
-	@Override
-	public String toString() {
-		return "Recommendation [recommender=" + recommender.getNif() + ", recommended=" + recommended.getNif()
-				+ ", usedForVoucher=" + usedForVoucher + "]";
-	}
+    @Override
+    public String toString() {
+        return "Recommendation [recommender=" + recommender.getNif() + ", recommended=" + recommended.getNif()
+            + ", usedForVoucher=" + usedForVoucher + "]";
+    }
 }

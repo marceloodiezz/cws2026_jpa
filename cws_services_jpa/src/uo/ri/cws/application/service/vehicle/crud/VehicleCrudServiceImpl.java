@@ -10,11 +10,11 @@ import uo.ri.util.exception.BusinessException;
 
 public class VehicleCrudServiceImpl implements VehicleCrudService {
 
-	private CommandExecutor executor = Factories.executor.forExecutor();
+    private CommandExecutor executor = Factories.executor.forExecutor();
 
-	@Override
-	public Optional<VehicleDto> findByPlate(String plate) throws BusinessException {
-		return executor.execute(new FindVehicleByPlate(plate));
-	}
+    @Override
+    public Optional<VehicleDto> findByPlate(String plate) throws BusinessException {
+        return executor.execute(new FindVehicleByPlate(plate));
+    }
 
 }

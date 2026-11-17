@@ -14,26 +14,26 @@ import uo.ri.util.exception.BusinessException;
 
 public class VoucherGenerationServiceImpl implements VoucherGenerationService {
 
-	private CommandExecutor executor = Factories.executor.forExecutor();
+    private CommandExecutor executor = Factories.executor.forExecutor();
 
-	@Override
-	public int[] generateVouchers() throws BusinessException {
-		int[] counters = { 0, 0, 0 };
+    @Override
+    public int[] generateVouchers() throws BusinessException {
+        int[] counters = { 0, 0, 0 };
 
-		counters[0] = executor.execute(new GenerateWorkOrderVouchers());
-		counters[1] = executor.execute(new GenerateRecommendationVouchers());
-		counters[2] = executor.execute(new GenerateInvoiceVouchers());
+        counters[0] = executor.execute(new GenerateWorkOrderVouchers());
+        counters[1] = executor.execute(new GenerateRecommendationVouchers());
+        counters[2] = executor.execute(new GenerateInvoiceVouchers());
 
-		return counters;
-	}
+        return counters;
+    }
 
-	@Override
-	public List<VoucherDto> findVouchersByClientNif(String nif) throws BusinessException {
-		return executor.execute(new FindVouchersByClientNif(nif));
-	}
+    @Override
+    public List<VoucherDto> findVouchersByClientNif(String nif) throws BusinessException {
+        return executor.execute(new FindVouchersByClientNif(nif));
+    }
 
-	@Override
-	public List<VoucherSummaryDto> getVoucherSummary() throws BusinessException {
-		return executor.execute(new GetVoucherSummary());
-	}
+    @Override
+    public List<VoucherSummaryDto> getVoucherSummary() throws BusinessException {
+        return executor.execute(new GetVoucherSummary());
+    }
 }

@@ -15,44 +15,44 @@ import uo.ri.util.exception.BusinessException;
 
 public class UpdateMechanic implements Command<Void> {
 
-	private MechanicDto dto;
-	private MechanicRepository repo = Factories.repository.forMechanic();
+    private MechanicDto dto;
+    private MechanicRepository repo = Factories.repository.forMechanic();
 
-	public UpdateMechanic(MechanicDto dto) {
-		ArgumentChecks.isNotNull(dto, "The mechanic dto is null");
-		ArgumentChecks.isNotBlank(dto.id, "The mechanic id is null");
-		ArgumentChecks.isNotBlank(dto.nif, "The mechanic nif is null");
-		ArgumentChecks.isNotBlank(dto.name, "The mechanic name is null");
-		ArgumentChecks.isNotBlank(dto.surname, "The mechanic surname is null");
+    public UpdateMechanic(MechanicDto dto) {
+        ArgumentChecks.isNotNull(dto, "The mechanic dto is null");
+        ArgumentChecks.isNotBlank(dto.id, "The mechanic id is null");
+        ArgumentChecks.isNotBlank(dto.nif, "The mechanic nif is null");
+        ArgumentChecks.isNotBlank(dto.name, "The mechanic name is null");
+        ArgumentChecks.isNotBlank(dto.surname, "The mechanic surname is null");
 
-		this.dto = dto;
-	}
+        this.dto = dto;
+    }
 
-	@Override
-	public Void execute() throws BusinessException {
+    @Override
+    public Void execute() throws BusinessException {
 
-		Optional<Mechanic> om = repo.findById(dto.id);
+        Optional<Mechanic> om = repo.findById(dto.id);
 
-		BusinessChecks.exists(om, "The mechanic does not exist");
+        BusinessChecks.exists(om, "The mechanic does not exist");
 
-		Mechanic m = om.get();
+        Mechanic m = om.get();
 
-		// NECESARIO EN TODOS LOS UPDATES PARA EVITAR SOBREESCRIBIR CUANDO HAY DOS
-		// TRANSACCIONES SIMULTANEAS
-		BusinessChecks.hasVersion(m.getVersion(), dto.version, "The mechanic has been updated by another transaction");
+        // NECESARIO EN TODOS LOS UPDATES PARA EVITAR SOBREESCRIBIR CUANDO HAY DOS
+        // TRANSACCIONES SIMULTANEAS
+        BusinessChecks.hasVersion(m.getVersion(), dto.version, "The mechanic has been updated by another transaction");
 
-		Nif newNif = new Nif(dto.nif);
-		FullName newName = new FullName(dto.name, dto.surname);
+        Nif newNif = new Nif(dto.nif);
+        FullName newName = new FullName(dto.name, dto.surname);
 
-		if (!m.getNif().equals(newNif)) {
-			BusinessChecks.doesNotExist(repo.findByNif(newNif), "There is already a mechanic with the same nif");
-			m.setNif(newNif);
-		}
+        if (!m.getNif().equals(newNif)) {
+            BusinessChecks.doesNotExist(repo.findByNif(newNif), "There is already a mechanic with the same nif");
+            m.setNif(newNif);
+        }
 
-		m.setFullName(newName);
-		m.updatedNow(); // Para actualizar la fecha de modificación (UPDATEDAT)
+        m.setFullName(newName);
+        m.updatedNow(); // Para actualizar la fecha de modificación (UPDATEDAT)
 
-		return null;
-	}
+        return null;
+    }
 
 }

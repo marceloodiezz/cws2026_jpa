@@ -20,62 +20,62 @@ import uo.ri.util.exception.BusinessException;
 
 public class SettleInvoice implements Command<Void> {
 
-	private String invoiceId;
-	private Map<String, BigDecimal> charges;
+    private String invoiceId;
+    private Map<String, BigDecimal> charges;
 
-	private InvoiceRepository invoiceRepo = Factories.repository.forInvoice();
-	private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
+    private InvoiceRepository invoiceRepo = Factories.repository.forInvoice();
+    private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
 
-	public SettleInvoice(String invoiceId, Map<String, BigDecimal> charges) {
-		ArgumentChecks.isNotBlank(invoiceId);
-		ArgumentChecks.isNotNull(charges);
-		ArgumentChecks.isTrue(!charges.isEmpty(), "Charges cannot be empty");
+    public SettleInvoice(String invoiceId, Map<String, BigDecimal> charges) {
+        ArgumentChecks.isNotBlank(invoiceId);
+        ArgumentChecks.isNotNull(charges);
+        ArgumentChecks.isTrue(!charges.isEmpty(), "Charges cannot be empty");
 
-		for (Map.Entry<String, BigDecimal> entry : charges.entrySet()) {
-			ArgumentChecks.isNotBlank(entry.getKey());
-			ArgumentChecks.isNotNull(entry.getValue());
-		}
+        for (Map.Entry<String, BigDecimal> entry : charges.entrySet()) {
+            ArgumentChecks.isNotBlank(entry.getKey());
+            ArgumentChecks.isNotNull(entry.getValue());
+        }
 
-		this.invoiceId = invoiceId;
-		this.charges = Map.copyOf(charges);
-	}
+        this.invoiceId = invoiceId;
+        this.charges = Map.copyOf(charges);
+    }
 
-	@Override
-	public Void execute() throws BusinessException {
-		Optional<Invoice> optionalInvoice = invoiceRepo.findById(invoiceId);
-		BusinessChecks.exists(optionalInvoice, "The invoice does not exist");
+    @Override
+    public Void execute() throws BusinessException {
+        Optional<Invoice> optionalInvoice = invoiceRepo.findById(invoiceId);
+        BusinessChecks.exists(optionalInvoice, "The invoice does not exist");
 
-		Invoice invoice = optionalInvoice.get();
-		BusinessChecks.isFalse(invoice.isSettled(), "The invoice is already settled");
+        Invoice invoice = optionalInvoice.get();
+        BusinessChecks.isFalse(invoice.isSettled(), "The invoice is already settled");
 
-		List<PaymentMean> paymentMeans = paymentMeanRepo.findByIds(charges.keySet());
-		BusinessChecks.isTrue(paymentMeans.size() == charges.size(), "Some payment means do not exist");
+        List<PaymentMean> paymentMeans = paymentMeanRepo.findByIds(charges.keySet());
+        BusinessChecks.isTrue(paymentMeans.size() == charges.size(), "Some payment means do not exist");
 
-		Map<PaymentMean, Money> requestedCharges = new HashMap<>();
+        Map<PaymentMean, Money> requestedCharges = new HashMap<>();
 
-		for (PaymentMean paymentMean : paymentMeans) {
-			BigDecimal amount = charges.get(paymentMean.getId());
-			requestedCharges.put(paymentMean, Money.of(amount));
-		}
+        for (PaymentMean paymentMean : paymentMeans) {
+            BigDecimal amount = charges.get(paymentMean.getId());
+            requestedCharges.put(paymentMean, Money.of(amount));
+        }
 
-		MoneyCalculator calculator = Money.calc();
+        MoneyCalculator calculator = Money.calc();
 
-		for (Money amount : requestedCharges.values()) {
-			calculator.add(Money.calc(amount).toMoneyRoundedToCents());
-		}
+        for (Money amount : requestedCharges.values()) {
+            calculator.add(Money.calc(amount).toMoneyRoundedToCents());
+        }
 
-		Money totalCharges = calculator.toMoneyRoundedToCents();
+        Money totalCharges = calculator.toMoneyRoundedToCents();
 
-		BusinessChecks.isTrue(totalCharges.equals(invoice.getTotal()), "Charges total must equal invoice total");
+        BusinessChecks.isTrue(totalCharges.equals(invoice.getTotal()), "Charges total must equal invoice total");
 
-		for (Map.Entry<PaymentMean, Money> entry : requestedCharges.entrySet()) {
-			PaymentMean paymentMean = entry.getKey();
-			Money amount = Money.calc(entry.getValue()).toMoneyRoundedToCents();
-			BusinessChecks.isTrue(paymentMean.canBeCharged(amount), "Payment mean cannot be charged");
-		}
+        for (Map.Entry<PaymentMean, Money> entry : requestedCharges.entrySet()) {
+            PaymentMean paymentMean = entry.getKey();
+            Money amount = Money.calc(entry.getValue()).toMoneyRoundedToCents();
+            BusinessChecks.isTrue(paymentMean.canBeCharged(amount), "Payment mean cannot be charged");
+        }
 
-		invoice.settle(requestedCharges);
+        invoice.settle(requestedCharges);
 
-		return null;
-	}
+        return null;
+    }
 }

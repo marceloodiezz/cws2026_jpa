@@ -8,49 +8,49 @@ import uo.ri.util.assertion.ArgumentChecks;
 
 public class VehicleType extends BaseEntity {
 
-	private String name;
-	private Money pricePerHour;
+    private String name;
+    private Money pricePerHour;
 
-	VehicleType() {
-	}
+    VehicleType() {
+    }
 
-	public VehicleType(String name, Money pricePerHour) {
-		ArgumentChecks.isNotBlank(name);
-		ArgumentChecks.isNotNull(pricePerHour);
-		ArgumentChecks.isTrue(pricePerHour.isNonNegative());
+    public VehicleType(String name, Money pricePerHour) {
+        ArgumentChecks.isNotBlank(name);
+        ArgumentChecks.isNotNull(pricePerHour);
+        ArgumentChecks.isTrue(pricePerHour.isNonNegative());
 
-		this.name = name;
-		this.pricePerHour = Money.calc(pricePerHour).toMoneyRoundedToCents();
-	}
+        this.name = name;
+        this.pricePerHour = Money.calc(pricePerHour).toMoneyRoundedToCents();
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Money getPricePerHour() {
-		return pricePerHour;
-	}
+    public Money getPricePerHour() {
+        return pricePerHour;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(name);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		VehicleType other = (VehicleType) obj;
-		return Objects.equals(name, other.name);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        VehicleType other = (VehicleType) obj;
+        return Objects.equals(name, other.name);
+    }
 
-	@Override
-	public String toString() {
-		return "VehicleType [name=" + name + ", pricePerHour=" + pricePerHour + "]";
-	}
+    @Override
+    public String toString() {
+        return "VehicleType [name=" + name + ", pricePerHour=" + pricePerHour + "]";
+    }
 
 }

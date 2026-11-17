@@ -14,19 +14,19 @@ import uo.ri.util.exception.BusinessException;
 
 public class FindPayMeansByClientNif implements Command<List<PaymentMeanDto>> {
 
-	private Nif nif;
+    private Nif nif;
 
-	private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
+    private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
 
-	public FindPayMeansByClientNif(String nif) {
-		ArgumentChecks.isNotBlank(nif);
-		this.nif = new Nif(nif);
-	}
+    public FindPayMeansByClientNif(String nif) {
+        ArgumentChecks.isNotBlank(nif);
+        this.nif = new Nif(nif);
+    }
 
-	@Override
-	public List<PaymentMeanDto> execute() throws BusinessException {
-		List<PaymentMean> paymentMeans = paymentMeanRepo.findPaymentMeansByClientNif(nif);
+    @Override
+    public List<PaymentMeanDto> execute() throws BusinessException {
+        List<PaymentMean> paymentMeans = paymentMeanRepo.findPaymentMeansByClientNif(nif);
 
-		return DtoAssembler.toPaymentMeanDtoList(paymentMeans);
-	}
+        return DtoAssembler.toPaymentMeanDtoList(paymentMeans);
+    }
 }

@@ -10,10 +10,10 @@ import uo.ri.util.exception.BusinessException;
 
 public class GetVoucherSummary implements Command<List<VoucherSummaryDto>> {
 
-	private PaymentMeanQueries paymentMeanQueries = Factories.query.forPaymentMean();
+    private PaymentMeanQueries paymentMeanQueries = Factories.query.forPaymentMean();
 
-	@Override
-	public List<VoucherSummaryDto> execute() throws BusinessException {
-		return paymentMeanQueries.getVouchersSummary();
-	}
+    @Override
+    public List<VoucherSummaryDto> execute() throws BusinessException {
+        return paymentMeanQueries.getVouchersSummary();
+    }
 }

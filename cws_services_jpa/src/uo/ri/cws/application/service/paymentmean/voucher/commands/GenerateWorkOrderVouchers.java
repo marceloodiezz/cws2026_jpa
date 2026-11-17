@@ -15,29 +15,29 @@ import uo.ri.util.exception.BusinessException;
 
 public class GenerateWorkOrderVouchers implements Command<Integer> {
 
-	private ClientRepository clientRepo = Factories.repository.forClient();
-	private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
+    private ClientRepository clientRepo = Factories.repository.forClient();
+    private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
 
-	@Override
-	public Integer execute() throws BusinessException {
-		int generated = 0;
+    @Override
+    public Integer execute() throws BusinessException {
+        int generated = 0;
 
-		List<Client> clients = clientRepo.findWithWorkOrdersUnusedForVoucher(3);
+        List<Client> clients = clientRepo.findWithWorkOrdersUnusedForVoucher(3);
 
-		for (Client client : clients) {
-			while (client.getWorkOrdersAvailableForVoucher20().size() >= 3) {
-				Voucher voucher = new Voucher(VoucherCode.generate(), "Por tres órdenes de trabajo", Money.of("20.00"));
+        for (Client client : clients) {
+            while (client.getWorkOrdersAvailableForVoucher20().size() >= 3) {
+                Voucher voucher = new Voucher(VoucherCode.generate(), "Por tres órdenes de trabajo", Money.of("20.00"));
 
-				Associations.Holds.link(client, voucher);
+                Associations.Holds.link(client, voucher);
 
-				paymentMeanRepo.add(voucher);
+                paymentMeanRepo.add(voucher);
 
-				client.markThreeWorkOrdersAsUsedForVoucher20();
+                client.markThreeWorkOrdersAsUsedForVoucher20();
 
-				generated++;
-			}
-		}
+                generated++;
+            }
+        }
 
-		return generated;
-	}
+        return generated;
+    }
 }

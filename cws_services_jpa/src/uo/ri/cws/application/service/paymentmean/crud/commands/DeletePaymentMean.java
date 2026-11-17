@@ -13,28 +13,28 @@ import uo.ri.util.exception.BusinessException;
 
 public class DeletePaymentMean implements Command<Void> {
 
-	private String id;
+    private String id;
 
-	private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
+    private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
 
-	private PaymentMeanQueries paymentMeanQueries = Factories.query.forPaymentMean();
+    private PaymentMeanQueries paymentMeanQueries = Factories.query.forPaymentMean();
 
-	public DeletePaymentMean(String id) {
-		ArgumentChecks.isNotBlank(id);
-		this.id = id;
-	}
+    public DeletePaymentMean(String id) {
+        ArgumentChecks.isNotBlank(id);
+        this.id = id;
+    }
 
-	@Override
-	public Void execute() throws BusinessException {
-		PaymentMean paymentMean = paymentMeanRepo.findById(id).orElse(null);
-		BusinessChecks.isNotNull(paymentMean, "Payment mean does not exist");
-		BusinessChecks.isFalse(paymentMean instanceof Cash, "Cash payment means cannot be deleted");
-		BusinessChecks.isFalse(paymentMeanQueries.hasCharges(id), "Payment mean has associated charges");
+    @Override
+    public Void execute() throws BusinessException {
+        PaymentMean paymentMean = paymentMeanRepo.findById(id).orElse(null);
+        BusinessChecks.isNotNull(paymentMean, "Payment mean does not exist");
+        BusinessChecks.isFalse(paymentMean instanceof Cash, "Cash payment means cannot be deleted");
+        BusinessChecks.isFalse(paymentMeanQueries.hasCharges(id), "Payment mean has associated charges");
 
-		Associations.Holds.unlink(paymentMean);
+        Associations.Holds.unlink(paymentMean);
 
-		paymentMeanRepo.remove(paymentMean);
+        paymentMeanRepo.remove(paymentMean);
 
-		return null;
-	}
+        return null;
+    }
 }

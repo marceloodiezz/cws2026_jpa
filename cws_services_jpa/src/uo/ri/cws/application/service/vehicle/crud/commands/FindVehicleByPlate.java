@@ -14,18 +14,18 @@ import uo.ri.util.exception.BusinessException;
 
 public class FindVehicleByPlate implements Command<Optional<VehicleDto>> {
 
-	private LicensePlate plate;
-	private VehicleRepository repo = Factories.repository.forVehicle();
-	
-	public FindVehicleByPlate(String plate) {
-		ArgumentChecks.isNotBlank( plate, "Plate cannot be null or blank" );
-		this.plate = new LicensePlate(plate);
-	}
+    private LicensePlate plate;
+    private VehicleRepository repo = Factories.repository.forVehicle();
 
-	@Override
-	public Optional<VehicleDto> execute() throws BusinessException {
-		Optional<Vehicle> ov = repo.findByPlate( plate );
-		return ov.map( v  -> DtoAssembler.toDto( v ) );
-	}
+    public FindVehicleByPlate(String plate) {
+        ArgumentChecks.isNotBlank(plate, "Plate cannot be null or blank");
+        this.plate = new LicensePlate(plate);
+    }
+
+    @Override
+    public Optional<VehicleDto> execute() throws BusinessException {
+        Optional<Vehicle> ov = repo.findByPlate(plate);
+        return ov.map(v -> DtoAssembler.toDto(v));
+    }
 
 }

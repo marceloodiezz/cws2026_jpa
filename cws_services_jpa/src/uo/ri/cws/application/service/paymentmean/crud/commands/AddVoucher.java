@@ -17,37 +17,37 @@ import uo.ri.util.exception.BusinessException;
 
 public class AddVoucher implements Command<VoucherDto> {
 
-	private VoucherDto dto;
+    private VoucherDto dto;
 
-	private ClientRepository clientRepo = Factories.repository.forClient();
+    private ClientRepository clientRepo = Factories.repository.forClient();
 
-	private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
+    private PaymentMeanRepository paymentMeanRepo = Factories.repository.forPaymentMean();
 
-	public AddVoucher(VoucherDto dto) {
-		ArgumentChecks.isNotNull(dto);
-		ArgumentChecks.isNotBlank(dto.clientId);
-		ArgumentChecks.isNotBlank(dto.code);
-		ArgumentChecks.isNotBlank(dto.description);
-		ArgumentChecks.isNotNull(dto.availableAmount);
-		ArgumentChecks.isTrue(dto.availableAmount.signum() >= 0, "Available amount cannot be negative");
+    public AddVoucher(VoucherDto dto) {
+        ArgumentChecks.isNotNull(dto);
+        ArgumentChecks.isNotBlank(dto.clientId);
+        ArgumentChecks.isNotBlank(dto.code);
+        ArgumentChecks.isNotBlank(dto.description);
+        ArgumentChecks.isNotNull(dto.availableAmount);
+        ArgumentChecks.isTrue(dto.availableAmount.signum() >= 0, "Available amount cannot be negative");
 
-		this.dto = dto;
-	}
+        this.dto = dto;
+    }
 
-	@Override
-	public VoucherDto execute() throws BusinessException {
-		Client client = clientRepo.findById(dto.clientId).orElse(null);
-		BusinessChecks.isNotNull(client, "Client does not exist");
+    @Override
+    public VoucherDto execute() throws BusinessException {
+        Client client = clientRepo.findById(dto.clientId).orElse(null);
+        BusinessChecks.isNotNull(client, "Client does not exist");
 
-		VoucherCode code = new VoucherCode(dto.code);
-		BusinessChecks.doesNotExist(paymentMeanRepo.findVoucherByCode(code), "Voucher already exists");
+        VoucherCode code = new VoucherCode(dto.code);
+        BusinessChecks.doesNotExist(paymentMeanRepo.findVoucherByCode(code), "Voucher already exists");
 
-		Voucher voucher = new Voucher(code, dto.description, Money.of(dto.availableAmount));
+        Voucher voucher = new Voucher(code, dto.description, Money.of(dto.availableAmount));
 
-		Associations.Holds.link(client, voucher);
+        Associations.Holds.link(client, voucher);
 
-		paymentMeanRepo.add(voucher);
+        paymentMeanRepo.add(voucher);
 
-		return DtoAssembler.toDto(voucher);
-	}
+        return DtoAssembler.toDto(voucher);
+    }
 }

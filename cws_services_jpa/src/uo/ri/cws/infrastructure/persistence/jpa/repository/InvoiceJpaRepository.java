@@ -11,16 +11,16 @@ import uo.ri.cws.infrastructure.persistence.jpa.util.Jpa;
 
 public class InvoiceJpaRepository extends BaseJpaRepository<Invoice> implements InvoiceRepository {
 
-	@Override
-	public Optional<Invoice> findByNumber(Long number) {
-		return Jpa.getManager().createNamedQuery("Invoice.findByNumber", Invoice.class).setParameter(1, number)
-				.getResultStream().findFirst();
-	}
+    @Override
+    public Optional<Invoice> findByNumber(Long number) {
+        return Jpa.getManager().createNamedQuery("Invoice.findByNumber", Invoice.class).setParameter(1, number)
+            .getResultStream().findFirst();
+    }
 
-	@Override
-	public List<Invoice> findOverAmountUnusedForVoucher(Money minimumAmount) {
-		return Jpa.getManager().createNamedQuery("Invoice.findOverAmountUnusedForVoucher", Invoice.class)
-				.setParameter(1, minimumAmount.amount()).getResultList();
-	}
+    @Override
+    public List<Invoice> findOverAmountUnusedForVoucher(Money minimumAmount) {
+        return Jpa.getManager().createNamedQuery("Invoice.findOverAmountUnusedForVoucher", Invoice.class)
+            .setParameter(1, minimumAmount.amount()).getResultList();
+    }
 
 }

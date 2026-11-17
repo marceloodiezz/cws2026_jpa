@@ -9,29 +9,29 @@ import uo.ri.util.exception.BusinessException;
 
 public class JpaCommandExecutor implements CommandExecutor {
 
-	@Override
-	public <T> T execute(Command<T> cmd) throws BusinessException {
-		EntityManager mapper = Jpa.createEntityManager();
-		try {
-			EntityTransaction trx = mapper.getTransaction();
-			trx.begin();
-			
-			try {
-				T res = cmd.execute();
-				trx.commit();
-				
-				return res;
-				
-			} catch (Exception ex) {
-				if ( trx.isActive() ) {
-					trx.rollback();
-				}
-				throw ex;
-			}
-		} finally {
-			if ( mapper.isOpen() ) {
-				mapper.close();
-			}
-		}
-	}
+    @Override
+    public <T> T execute(Command<T> cmd) throws BusinessException {
+        EntityManager mapper = Jpa.createEntityManager();
+        try {
+            EntityTransaction trx = mapper.getTransaction();
+            trx.begin();
+
+            try {
+                T res = cmd.execute();
+                trx.commit();
+
+                return res;
+
+            } catch (Exception ex) {
+                if (trx.isActive()) {
+                    trx.rollback();
+                }
+                throw ex;
+            }
+        } finally {
+            if (mapper.isOpen()) {
+                mapper.close();
+            }
+        }
+    }
 }

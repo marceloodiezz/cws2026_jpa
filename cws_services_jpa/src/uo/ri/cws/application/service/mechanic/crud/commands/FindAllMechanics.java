@@ -10,12 +10,12 @@ import uo.ri.cws.application.util.command.Command;
 
 public class FindAllMechanics implements Command<List<MechanicDto>> {
 
-	private MechanicRepository repo = Factories.repository.forMechanic();
+    private MechanicRepository repo = Factories.repository.forMechanic();
 
-	@Override
-	public List<MechanicDto> execute() {
+    @Override
+    public List<MechanicDto> execute() {
 
-		return DtoAssembler.toMechanicDtoList(repo.findAll());
-	}
+        return DtoAssembler.toMechanicDtoList(repo.findAll());
+    }
 
 }

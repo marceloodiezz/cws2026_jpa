@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class BaseJpaRepository<T> {
-	
+
 	public void add(T t) {
 		Jpa.getManager().persist( t );
 	}
@@ -18,11 +18,11 @@ public class BaseJpaRepository<T> {
 		T found = Jpa.getManager().find(type, id);
 		return Optional.ofNullable( found );
 	}
-	
+
 	public List<T> findAll() {
 		String entity = type.getName();
 		String query = "select o from " + entity + " o";
-		
+
 		return Jpa.getManager()
 				.createQuery(query, type)
 				.getResultList();
@@ -43,9 +43,9 @@ public class BaseJpaRepository<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	private Class<T> hackTheTypeOfGenericParameter() {
-		ParameterizedType superType = 
+		ParameterizedType superType =
 			(ParameterizedType)	getClass().getGenericSuperclass();
 	    return (Class<T>) superType.getActualTypeArguments()[0];
 	}
-	
+
 }

@@ -9,96 +9,96 @@ import uo.ri.util.assertion.ArgumentChecks;
 /**
  * A substitution is a relation between an intervention and a spare part. It
  * represents the fact that a spare part has been used in an intervention.
- * 
+ *
  * Internal aggregate class of WorkOrder. Only Intervention can create
  * Substitutions (through WorkOrder).
  */
 
 public class Substitution extends BaseEntity {
 
-	// Natural attributes
-	private Money price;
-	private int quantity;
+    // Natural attributes
+    private Money price;
+    private int quantity;
 
-	// Accidental attributes
-	private SparePart sparePart;
-	private Intervention intervention;
+    // Accidental attributes
+    private SparePart sparePart;
+    private Intervention intervention;
 
-	// ---------------------------- Constructors -----------------------------
+    // ---------------------------- Constructors -----------------------------
 
-	Substitution() {
-	}
+    Substitution() {
+    }
 
-	/**
-	 * Package-private constructor to create a new Substitution with the given
-	 * parameters. Only Intervention can create Substitutions.
-	 */
-	/* package */ Substitution(SparePart sparePart, Intervention intervention, int quantity) {
-		// Validate input parameters
-		// assignations
-		// link the substitution with the intervention and spare part (atomiclink)
-		ArgumentChecks.isNotNull(sparePart, "Spare part cannot be null");
-		ArgumentChecks.isNotNull(intervention, "Intervention cannot be null");
-		ArgumentChecks.isTrue(quantity > 0, "Quantity must be positive");
+    /**
+     * Package-private constructor to create a new Substitution with the given
+     * parameters. Only Intervention can create Substitutions.
+     */
+    /* package */ Substitution(SparePart sparePart, Intervention intervention, int quantity) {
+        // Validate input parameters
+        // assignations
+        // link the substitution with the intervention and spare part (atomiclink)
+        ArgumentChecks.isNotNull(sparePart, "Spare part cannot be null");
+        ArgumentChecks.isNotNull(intervention, "Intervention cannot be null");
+        ArgumentChecks.isTrue(quantity > 0, "Quantity must be positive");
 
-		this.price = sparePart.getUnitPrice();
-		this.quantity = quantity;
+        this.price = sparePart.getUnitPrice();
+        this.quantity = quantity;
 
-		Associations.PerformsSubstitutes.atomicLink(intervention, this, sparePart);
-	}
+        Associations.PerformsSubstitutes.atomicLink(intervention, this, sparePart);
+    }
 
-	// ---------------------------- Association helpers
-	// -----------------------------
+    // ---------------------------- Association helpers
+    // -----------------------------
 
-	public Money getPrice() {
-		return price;
-	}
+    public Money getPrice() {
+        return price;
+    }
 
-	public int getQuantity() {
-		return quantity;
-	}
+    public int getQuantity() {
+        return quantity;
+    }
 
-	void _setSparePart(SparePart sparePart) {
-		this.sparePart = sparePart;
-	}
+    void _setSparePart(SparePart sparePart) {
+        this.sparePart = sparePart;
+    }
 
-	void _setIntervention(Intervention intervention) {
-		this.intervention = intervention;
-	}
+    void _setIntervention(Intervention intervention) {
+        this.intervention = intervention;
+    }
 
-	public SparePart getSparePart() {
-		return sparePart;
-	}
+    public SparePart getSparePart() {
+        return sparePart;
+    }
 
-	public Intervention getIntervention() {
-		return intervention;
-	}
+    public Intervention getIntervention() {
+        return intervention;
+    }
 
-	// ---------------------------- Business methods -----------------------------
-	public Money getTotalAmount() {
-		return Money.calc(price).times(quantity).toMoneyRoundedToCents();
-	}
+    // ---------------------------- Business methods -----------------------------
+    public Money getTotalAmount() {
+        return Money.calc(price).times(quantity).toMoneyRoundedToCents();
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(intervention, sparePart);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(intervention, sparePart);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Substitution other = (Substitution) obj;
-		return Objects.equals(intervention, other.intervention) && Objects.equals(sparePart, other.sparePart);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Substitution other = (Substitution) obj;
+        return Objects.equals(intervention, other.intervention) && Objects.equals(sparePart, other.sparePart);
+    }
 
-	@Override
-	public String toString() {
-		return "Substitution [price=" + price + ", quantity=" + quantity + "]";
-	}
+    @Override
+    public String toString() {
+        return "Substitution [price=" + price + ", quantity=" + quantity + "]";
+    }
 
 }

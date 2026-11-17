@@ -7,77 +7,77 @@ import uo.ri.util.assertion.StateChecks;
 
 public class Charge extends BaseEntity {
 
-	// Natural attributes
-	private Money amount; // cents
+    // Natural attributes
+    private Money amount; // cents
 
-	// Accidental attributes
-	private Invoice invoice;
-	private PaymentMean paymentMean;
+    // Accidental attributes
+    private Invoice invoice;
+    private PaymentMean paymentMean;
 
-	// ------ Constructors -----
+    // ------ Constructors -----
 
-	Charge() {
-	}
+    Charge() {
+    }
 
-	/* package */ Charge(Invoice invoice, PaymentMean paymentMean, Money amount) {
-		// validates the arguments
-		// store the amount rounded to cents
-		// increments the paymentMean accumulated -> paymentMean.charge( amount )
-		// links invoice, this and paymentMean
-		ArgumentChecks.isNotNull(invoice, "Invoice cannot be null");
-		ArgumentChecks.isNotNull(paymentMean, "Payment mean cannot be null");
+    /* package */ Charge(Invoice invoice, PaymentMean paymentMean, Money amount) {
+        // validates the arguments
+        // store the amount rounded to cents
+        // increments the paymentMean accumulated -> paymentMean.charge( amount )
+        // links invoice, this and paymentMean
+        ArgumentChecks.isNotNull(invoice, "Invoice cannot be null");
+        ArgumentChecks.isNotNull(paymentMean, "Payment mean cannot be null");
 
-		Money normalizedAmount = PaymentMean.normalizePositive(amount);
+        Money normalizedAmount = PaymentMean.normalizePositive(amount);
 
-		paymentMean.charge(normalizedAmount);
+        paymentMean.charge(normalizedAmount);
 
-		this.amount = normalizedAmount;
+        this.amount = normalizedAmount;
 
-		Associations.SettlesWithdraws.atomicLink(invoice, this, paymentMean);
-	}
+        Associations.SettlesWithdraws.atomicLink(invoice, this, paymentMean);
+    }
 
-	// ---- Getters ----
+    // ---- Getters ----
 
-	public Money getAmount() {
-		return amount;
-	}
+    public Money getAmount() {
+        return amount;
+    }
 
-	public Invoice getInvoice() {
-		return invoice;
-	}
+    public Invoice getInvoice() {
+        return invoice;
+    }
 
-	public PaymentMean getPaymentMean() {
-		return paymentMean;
-	}
+    public PaymentMean getPaymentMean() {
+        return paymentMean;
+    }
 
-	// ---- Bussiness methods ----
+    // ---- Bussiness methods ----
 
-	/**
-	 * Restores and the value to the payment mean and unlinks the charge from the
-	 * invoice and the payment mean.
-	 */
-	/* package */ void rewind() {
-		StateChecks.isTrue(paymentMean != null, "Charge has no payment mean");
-		StateChecks.isTrue(invoice != null, "Charge has no invoice");
+    /**
+     * Restores and the value to the payment mean and unlinks the charge from the
+     * invoice and the payment mean.
+     */
+    /* package */ void rewind() {
+        StateChecks.isTrue(paymentMean != null, "Charge has no payment mean");
+        StateChecks.isTrue(invoice != null, "Charge has no invoice");
 
-		paymentMean.rewind(amount);
+        paymentMean.rewind(amount);
 
-		Associations.SettlesWithdraws.atomicUnlink(this);
-	}
+        Associations.SettlesWithdraws.atomicUnlink(this);
+    }
 
-	// ---- Association helpers ----
+    // ---- Association helpers ----
 
-	void _setInvoice(Invoice invoice) {
-		this.invoice = invoice;
-	}
+    void _setInvoice(Invoice invoice) {
+        this.invoice = invoice;
+    }
 
-	void _setPaymentMean(PaymentMean paymentMean) {
-		this.paymentMean = paymentMean;
-	}
+    void _setPaymentMean(PaymentMean paymentMean) {
+        this.paymentMean = paymentMean;
+    }
 
-	// ---- toString ----
-	@Override
-	public String toString() {
-		return "Charge [invoice=" + invoice + ", paymentMean=" + paymentMean + ", amount=" + amount + "]";
-	}
+    // ---- toString ----
+    @Override
+    public String toString() {
+        return "Charge [invoice=" + invoice + ", paymentMean=" + paymentMean + ", amount=" + amount + "]";
+    }
 }

@@ -22,65 +22,65 @@ import uo.ri.util.exception.NotYetImplementedException;
 
 public class JpaServicesFactoryImpl implements ServiceFactory {
 
-	@Override
-	public MechanicCrudService forMechanicCrudService() {
-		return new MechanicCrudServiceImpl();
-	}
+    @Override
+    public MechanicCrudService forMechanicCrudService() {
+        return new MechanicCrudServiceImpl();
+    }
 
-	@Override
-	public InvoicingService forCreateInvoiceService() {
-		return new InvoicingServiceImpl();
-	}
+    @Override
+    public InvoicingService forCreateInvoiceService() {
+        return new InvoicingServiceImpl();
+    }
 
-	@Override
-	public ClientCrudService forClientCrudService() {
-		return new ClientCrudServiceImpl();
-	}
+    @Override
+    public ClientCrudService forClientCrudService() {
+        return new ClientCrudServiceImpl();
+    }
 
-	@Override
-	public PaymentMeanCrudService forPaymentMeanCrudService() {
-		return new PaymentMeanCrudServiceImpl();
-	}
+    @Override
+    public PaymentMeanCrudService forPaymentMeanCrudService() {
+        return new PaymentMeanCrudServiceImpl();
+    }
 
-	@Override
-	public VoucherGenerationService forVoucherService() {
-		return new VoucherGenerationServiceImpl();
-	}
+    @Override
+    public VoucherGenerationService forVoucherService() {
+        return new VoucherGenerationServiceImpl();
+    }
 
-	@Override
-	public VehicleCrudService forVehicleCrudService() {
-		return new VehicleCrudServiceImpl();
-	}
+    @Override
+    public VehicleCrudService forVehicleCrudService() {
+        return new VehicleCrudServiceImpl();
+    }
 
-	// the not yet implemented section ------------------------------
-	@Override
-	public SparePartCrudService forSparePartCrudService() {
-		throw new NotYetImplementedException();
-	}
+    // the not yet implemented section ------------------------------
+    @Override
+    public SparePartCrudService forSparePartCrudService() {
+        throw new NotYetImplementedException();
+    }
 
-	@Override
-	public VehicleTypeCrudService forVehicleTypeCrudService() {
-		throw new NotYetImplementedException();
-	}
+    @Override
+    public VehicleTypeCrudService forVehicleTypeCrudService() {
+        throw new NotYetImplementedException();
+    }
 
-	@Override
-	public ClientHistoryService forClientHistoryService() {
-		throw new NotYetImplementedException();
-	}
+    @Override
+    public ClientHistoryService forClientHistoryService() {
+        throw new NotYetImplementedException();
+    }
 
-	@Override
-	public WorkOrderCrudService forWorkOrderCrudService() {
-		throw new NotYetImplementedException();
-	}
+    @Override
+    public WorkOrderCrudService forWorkOrderCrudService() {
+        throw new NotYetImplementedException();
+    }
 
-	@Override
-	public ViewAssignedWorkOrdersService forViewAssignedWorkOrdersService() {
-		throw new NotYetImplementedException();
-	}
+    @Override
+    public ViewAssignedWorkOrdersService forViewAssignedWorkOrdersService() {
+        throw new NotYetImplementedException();
+    }
 
-	@Override
-	public CloseWorkOrderService forClosingWorkOrder() {
-		throw new NotYetImplementedException();
-	}
+    @Override
+    public CloseWorkOrderService forClosingWorkOrder() {
+        throw new NotYetImplementedException();
+    }
 
 }

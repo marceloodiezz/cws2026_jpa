@@ -8,15 +8,15 @@ import uo.ri.cws.domain.types.Nif;
 
 public interface MechanicRepository extends Repository<Mechanic> {
 
-	/**
-	 * @param nif
-	 * @return the mechanic identified by the nif or null if none
-	 */
-	Optional<Mechanic> findByNif(Nif nif);
+    /**
+     * @param nif
+     * @return the mechanic identified by the nif or null if none
+     */
+    Optional<Mechanic> findByNif(Nif nif);
 
-	/**
-	 * @return a list with all mechanics (might be empty)
-	 */
-	List<Mechanic> findAll();
+    /**
+     * @return a list with all mechanics (might be empty)
+     */
+    List<Mechanic> findAll();
 
 }

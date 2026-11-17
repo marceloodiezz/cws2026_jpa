@@ -16,34 +16,34 @@ import uo.ri.cws.infrastructure.persistence.jpa.util.Jpa;
 
 public class PaymentMeanJpaRepository extends BaseJpaRepository<PaymentMean> implements PaymentMeanRepository {
 
-	@Override
-	public List<PaymentMean> findPaymentMeansByClientNif(Nif nif) {
-		return Jpa.getManager().createNamedQuery("PaymentMean.findByNif", PaymentMean.class).setParameter(1, nif)
-				.getResultList();
-	}
+    @Override
+    public List<PaymentMean> findPaymentMeansByClientNif(Nif nif) {
+        return Jpa.getManager().createNamedQuery("PaymentMean.findByNif", PaymentMean.class).setParameter(1, nif)
+            .getResultList();
+    }
 
-	@Override
-	public List<Voucher> findVouchersByClientNif(Nif nif) {
-		return Jpa.getManager().createNamedQuery("Voucher.findByClientNif", Voucher.class).setParameter(1, nif)
-				.getResultList();
-	}
+    @Override
+    public List<Voucher> findVouchersByClientNif(Nif nif) {
+        return Jpa.getManager().createNamedQuery("Voucher.findByClientNif", Voucher.class).setParameter(1, nif)
+            .getResultList();
+    }
 
-	@Override
-	public Optional<Voucher> findVoucherByCode(VoucherCode code) {
-		return Jpa.getManager().createNamedQuery("Voucher.findByCode", Voucher.class).setParameter(1, code)
-				.getResultStream().findFirst();
-	}
+    @Override
+    public Optional<Voucher> findVoucherByCode(VoucherCode code) {
+        return Jpa.getManager().createNamedQuery("Voucher.findByCode", Voucher.class).setParameter(1, code)
+            .getResultStream().findFirst();
+    }
 
-	@Override
-	public Optional<CreditCard> findCreditCardByNumber(CreditCardNumber number) {
-		return Jpa.getManager().createNamedQuery("CreditCard.findByNumber", CreditCard.class).setParameter(1, number)
-				.getResultStream().findFirst();
-	}
+    @Override
+    public Optional<CreditCard> findCreditCardByNumber(CreditCardNumber number) {
+        return Jpa.getManager().createNamedQuery("CreditCard.findByNumber", CreditCard.class).setParameter(1, number)
+            .getResultStream().findFirst();
+    }
 
-	@Override
-	public List<PaymentMean> findByIds(Collection<String> ids) {
-		return Jpa.getManager().createNamedQuery("PaymentMean.findByIds", PaymentMean.class).setParameter(1, ids)
-				.getResultList();
-	}
+    @Override
+    public List<PaymentMean> findByIds(Collection<String> ids) {
+        return Jpa.getManager().createNamedQuery("PaymentMean.findByIds", PaymentMean.class).setParameter(1, ids)
+            .getResultList();
+    }
 
 }

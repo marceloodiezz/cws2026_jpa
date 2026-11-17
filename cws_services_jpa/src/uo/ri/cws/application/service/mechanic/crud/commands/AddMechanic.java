@@ -13,33 +13,33 @@ import uo.ri.util.exception.BusinessException;
 
 public class AddMechanic implements Command<MechanicDto> {
 
-	private MechanicDto dto;
-	private MechanicRepository repo = Factories.repository.forMechanic();
+    private MechanicDto dto;
+    private MechanicRepository repo = Factories.repository.forMechanic();
 
-	public AddMechanic(MechanicDto dto) {
-		ArgumentChecks.isNotNull(dto, "The mechanic dto is null");
-		ArgumentChecks.isNotBlank(dto.nif, "The mechanic nif is null");
-		ArgumentChecks.isNotBlank(dto.name, "The mechanic name is null");
-		ArgumentChecks.isNotBlank(dto.surname, "The mechanic surname is null");
-		this.dto = dto;
-	}
+    public AddMechanic(MechanicDto dto) {
+        ArgumentChecks.isNotNull(dto, "The mechanic dto is null");
+        ArgumentChecks.isNotBlank(dto.nif, "The mechanic nif is null");
+        ArgumentChecks.isNotBlank(dto.name, "The mechanic name is null");
+        ArgumentChecks.isNotBlank(dto.surname, "The mechanic surname is null");
+        this.dto = dto;
+    }
 
-	@Override
-	public MechanicDto execute() throws BusinessException {
+    @Override
+    public MechanicDto execute() throws BusinessException {
 
-		Nif nif = new Nif(dto.nif);
-		FullName name = new FullName(dto.name, dto.surname);
+        Nif nif = new Nif(dto.nif);
+        FullName name = new FullName(dto.name, dto.surname);
 
-		BusinessChecks.doesNotExist(repo.findByNif(nif), "There is already a mechanic with that nif");
+        BusinessChecks.doesNotExist(repo.findByNif(nif), "There is already a mechanic with that nif");
 
-		Mechanic m = new Mechanic(nif, name);
+        Mechanic m = new Mechanic(nif, name);
 
-		repo.add(m);
+        repo.add(m);
 
-		dto.id = m.getId();
-		dto.version = m.getVersion();
+        dto.id = m.getId();
+        dto.version = m.getVersion();
 
-		return dto;
-	}
+        return dto;
+    }
 
 }

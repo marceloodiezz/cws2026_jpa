@@ -17,212 +17,212 @@ import uo.ri.util.assertion.StateChecks;
 
 public class Client extends BaseEntity {
 
-	// Natural attributes
-	private Nif nif;
-	private FullName fullName;
-	private Email email;
-	private PhoneNumber phone;
-	private Address address;
+    // Natural attributes
+    private Nif nif;
+    private FullName fullName;
+    private Email email;
+    private PhoneNumber phone;
+    private Address address;
 
-	// Accidental attributes
-	private Set<Vehicle> vehicles = new HashSet<>();
-	private Set<PaymentMean> paymentMeans = new HashSet<>();
-	private Set<Recommendation> recommendations = new HashSet<>();
-	private Recommendation recommendation;
+    // Accidental attributes
+    private Set<Vehicle> vehicles = new HashSet<>();
+    private Set<PaymentMean> paymentMeans = new HashSet<>();
+    private Set<Recommendation> recommendations = new HashSet<>();
+    private Recommendation recommendation;
 
-	// ---- Constructors ----
-	Client() {
-	}
+    // ---- Constructors ----
+    Client() {
+    }
 
-	public Client(Nif nif) {
-		this(nif, new FullName("No name", "No surname"), new Email("default@example.com"),
-				new PhoneNumber("+34600000000"), new Address("No street", "No city", "No zip", "No country"));
-	}
+    public Client(Nif nif) {
+        this(nif, new FullName("No name", "No surname"), new Email("default@example.com"),
+            new PhoneNumber("+34600000000"), new Address("No street", "No city", "No zip", "No country"));
+    }
 
-	public Client(Nif nif, FullName fullName) {
-		this(nif, fullName, new Email("default@example.com"), new PhoneNumber("+34600000000"),
-				new Address("No street", "No city", "No zip", "No country"));
-	}
+    public Client(Nif nif, FullName fullName) {
+        this(nif, fullName, new Email("default@example.com"), new PhoneNumber("+34600000000"),
+            new Address("No street", "No city", "No zip", "No country"));
+    }
 
-	public Client(Nif nif, FullName fullName, Email email, PhoneNumber phone, Address address) {
-		ArgumentChecks.isNotNull(nif);
-		ArgumentChecks.isNotNull(fullName);
-		ArgumentChecks.isNotNull(email);
-		ArgumentChecks.isNotNull(phone);
-		ArgumentChecks.isNotNull(address);
+    public Client(Nif nif, FullName fullName, Email email, PhoneNumber phone, Address address) {
+        ArgumentChecks.isNotNull(nif);
+        ArgumentChecks.isNotNull(fullName);
+        ArgumentChecks.isNotNull(email);
+        ArgumentChecks.isNotNull(phone);
+        ArgumentChecks.isNotNull(address);
 
-		this.nif = nif;
-		this.fullName = fullName;
-		this.email = email;
-		this.phone = phone;
-		this.address = address;
-	}
+        this.nif = nif;
+        this.fullName = fullName;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+    }
 
-	public Nif getNif() {
-		return nif;
-	}
+    public Nif getNif() {
+        return nif;
+    }
 
-	public FullName getFullName() {
-		return fullName;
-	}
+    public FullName getFullName() {
+        return fullName;
+    }
 
-	public Email getEmail() {
-		return email;
-	}
+    public Email getEmail() {
+        return email;
+    }
 
-	public PhoneNumber getPhone() {
-		return phone;
-	}
+    public PhoneNumber getPhone() {
+        return phone;
+    }
 
-	public Address getAddress() {
-		return address;
-	}
+    public Address getAddress() {
+        return address;
+    }
 
-	public void setNif(Nif nif) {
-		ArgumentChecks.isNotNull(nif, "The nif cannot be null");
-		this.nif = nif;
-	}
+    public void setNif(Nif nif) {
+        ArgumentChecks.isNotNull(nif, "The nif cannot be null");
+        this.nif = nif;
+    }
 
-	public void setFullName(FullName fullName) {
-		ArgumentChecks.isNotNull(fullName, "The full name cannot be null");
-		this.fullName = fullName;
-	}
+    public void setFullName(FullName fullName) {
+        ArgumentChecks.isNotNull(fullName, "The full name cannot be null");
+        this.fullName = fullName;
+    }
 
-	public void setEmail(Email email) {
-		ArgumentChecks.isNotNull(email, "The email cannot be null");
-		this.email = email;
-	}
+    public void setEmail(Email email) {
+        ArgumentChecks.isNotNull(email, "The email cannot be null");
+        this.email = email;
+    }
 
-	public void setPhone(PhoneNumber phone) {
-		ArgumentChecks.isNotNull(phone, "The phone cannot be null");
-		this.phone = phone;
-	}
+    public void setPhone(PhoneNumber phone) {
+        ArgumentChecks.isNotNull(phone, "The phone cannot be null");
+        this.phone = phone;
+    }
 
-	public void setAddress(Address address) {
-		ArgumentChecks.isNotNull(address, "The address cannot be null");
-		this.address = address;
-	}
+    public void setAddress(Address address) {
+        ArgumentChecks.isNotNull(address, "The address cannot be null");
+        this.address = address;
+    }
 
-	Set<Vehicle> _getVehicles() {
-		return vehicles;
-	}
+    Set<Vehicle> _getVehicles() {
+        return vehicles;
+    }
 
-	public Set<Vehicle> getVehicles() {
-		return new HashSet<>(vehicles);
-	}
+    public Set<Vehicle> getVehicles() {
+        return new HashSet<>(vehicles);
+    }
 
-	Set<PaymentMean> _getPaymentMeans() {
-		return paymentMeans;
-	}
+    Set<PaymentMean> _getPaymentMeans() {
+        return paymentMeans;
+    }
 
-	public Set<PaymentMean> getPaymentMeans() {
-		return new HashSet<>(paymentMeans);
-	}
+    public Set<PaymentMean> getPaymentMeans() {
+        return new HashSet<>(paymentMeans);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(nif);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(nif);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Client other = (Client) obj;
-		return Objects.equals(nif, other.nif);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Client other = (Client) obj;
+        return Objects.equals(nif, other.nif);
+    }
 
-	@Override
-	public String toString() {
-		return "Client [nif=" + nif + ", fullName=" + fullName + ", email=" + email + ", phone=" + phone + ", address="
-				+ address + "]";
-	}
+    @Override
+    public String toString() {
+        return "Client [nif=" + nif + ", fullName=" + fullName + ", email=" + email + ", phone=" + phone + ", address="
+            + address + "]";
+    }
 
-	// Métodos de la extensión ------------------------------
+    // Métodos de la extensión ------------------------------
 
-	public Set<Recommendation> getRecommendations() {
-		return new HashSet<>(recommendations);
-	}
+    public Set<Recommendation> getRecommendations() {
+        return new HashSet<>(recommendations);
+    }
 
-	Set<Recommendation> _getRecommendations() {
-		return recommendations;
-	}
+    Set<Recommendation> _getRecommendations() {
+        return recommendations;
+    }
 
-	public Recommendation getRecommendation() {
-		return recommendation;
-	}
+    public Recommendation getRecommendation() {
+        return recommendation;
+    }
 
-	void _setRecommendation(Recommendation recommendation) {
-		this.recommendation = recommendation;
-	}
+    void _setRecommendation(Recommendation recommendation) {
+        this.recommendation = recommendation;
+    }
 
-	private boolean hasPaidInvoice() {
-		for (Vehicle vehicle : getVehicles()) {
-			for (WorkOrder workOrder : vehicle.getWorkOrders()) {
-				Invoice invoice = workOrder.getInvoice();
+    private boolean hasPaidInvoice() {
+        for (Vehicle vehicle : getVehicles()) {
+            for (WorkOrder workOrder : vehicle.getWorkOrders()) {
+                Invoice invoice = workOrder.getInvoice();
 
-				if (invoice != null && invoice.isSettled()) {
-					return true;
-				}
-			}
-		}
+                if (invoice != null && invoice.isSettled()) {
+                    return true;
+                }
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public List<Recommendation> getRecommendationsAvailableForVoucher25() {
-		List<Recommendation> available = new ArrayList<>();
-		for (Recommendation recommendation : getRecommendations()) {
-			if (!recommendation.isUsedForVoucher() && recommendation.getRecommended().hasPaidInvoice()) {
-				available.add(recommendation);
-			}
-		}
+    public List<Recommendation> getRecommendationsAvailableForVoucher25() {
+        List<Recommendation> available = new ArrayList<>();
+        for (Recommendation recommendation : getRecommendations()) {
+            if (!recommendation.isUsedForVoucher() && recommendation.getRecommended().hasPaidInvoice()) {
+                available.add(recommendation);
+            }
+        }
 
-		return available;
-	}
+        return available;
+    }
 
-	public boolean isEligibleForVoucher25() {
-		return hasPaidInvoice() && getRecommendationsAvailableForVoucher25().size() >= 3;
-	}
+    public boolean isEligibleForVoucher25() {
+        return hasPaidInvoice() && getRecommendationsAvailableForVoucher25().size() >= 3;
+    }
 
-	public void markThreeRecommendationsAsUsedForVoucher25() {
-		List<Recommendation> available = getRecommendationsAvailableForVoucher25();
+    public void markThreeRecommendationsAsUsedForVoucher25() {
+        List<Recommendation> available = getRecommendationsAvailableForVoucher25();
 
-		StateChecks.isTrue(available.size() >= 3, "Not enough recommendations available");
+        StateChecks.isTrue(available.size() >= 3, "Not enough recommendations available");
 
-		for (int i = 0; i < 3; i++) {
-			available.get(i).markAsUsedForVoucher();
-		}
-	}
+        for (int i = 0; i < 3; i++) {
+            available.get(i).markAsUsedForVoucher();
+        }
+    }
 
-	public List<WorkOrder> getWorkOrdersAvailableForVoucher20() {
-		List<WorkOrder> available = new ArrayList<>();
+    public List<WorkOrder> getWorkOrdersAvailableForVoucher20() {
+        List<WorkOrder> available = new ArrayList<>();
 
-		for (Vehicle vehicle : getVehicles()) {
-			for (WorkOrder workOrder : vehicle.getWorkOrders()) {
-				Invoice invoice = workOrder.getInvoice();
+        for (Vehicle vehicle : getVehicles()) {
+            for (WorkOrder workOrder : vehicle.getWorkOrders()) {
+                Invoice invoice = workOrder.getInvoice();
 
-				if (invoice != null && invoice.isSettled() && !workOrder.isUsedForVoucher()) {
-					available.add(workOrder);
-				}
-			}
-		}
+                if (invoice != null && invoice.isSettled() && !workOrder.isUsedForVoucher()) {
+                    available.add(workOrder);
+                }
+            }
+        }
 
-		return available;
-	}
+        return available;
+    }
 
-	public void markThreeWorkOrdersAsUsedForVoucher20() {
-		List<WorkOrder> available = getWorkOrdersAvailableForVoucher20();
+    public void markThreeWorkOrdersAsUsedForVoucher20() {
+        List<WorkOrder> available = getWorkOrdersAvailableForVoucher20();
 
-		StateChecks.isTrue(available.size() >= 3, "Not enough work orders available");
+        StateChecks.isTrue(available.size() >= 3, "Not enough work orders available");
 
-		for (int i = 0; i < 3; i++) {
-			available.get(i).markAsUsedForVoucher();
-		}
-	}
+        for (int i = 0; i < 3; i++) {
+            available.get(i).markAsUsedForVoucher();
+        }
+    }
 
 }

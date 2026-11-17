@@ -18,56 +18,56 @@ import uo.ri.util.exception.BusinessException;
 
 public class UpdateClient implements Command<Void> {
 
-	private ClientDto dto;
+    private ClientDto dto;
 
-	private ClientRepository clientRepo = Factories.repository.forClient();
+    private ClientRepository clientRepo = Factories.repository.forClient();
 
-	public UpdateClient(ClientDto dto) {
-		ArgumentChecks.isNotNull(dto, "The client cannot be null");
+    public UpdateClient(ClientDto dto) {
+        ArgumentChecks.isNotNull(dto, "The client cannot be null");
 
-		ArgumentChecks.isNotBlank(dto.id, "The client id cannot be blank");
-		ArgumentChecks.isNotBlank(dto.nif, "The nif cannot be blank");
-		ArgumentChecks.isNotBlank(dto.name, "The name cannot be blank");
-		ArgumentChecks.isNotBlank(dto.surname, "The surname cannot be blank");
-		ArgumentChecks.isNotBlank(dto.email, "The email cannot be blank");
-		ArgumentChecks.isNotBlank(dto.phone, "The phone cannot be blank");
+        ArgumentChecks.isNotBlank(dto.id, "The client id cannot be blank");
+        ArgumentChecks.isNotBlank(dto.nif, "The nif cannot be blank");
+        ArgumentChecks.isNotBlank(dto.name, "The name cannot be blank");
+        ArgumentChecks.isNotBlank(dto.surname, "The surname cannot be blank");
+        ArgumentChecks.isNotBlank(dto.email, "The email cannot be blank");
+        ArgumentChecks.isNotBlank(dto.phone, "The phone cannot be blank");
 
-		ArgumentChecks.isNotBlank(dto.addressStreet, "The street cannot be blank");
-		ArgumentChecks.isNotBlank(dto.addressCity, "The city cannot be blank");
-		ArgumentChecks.isNotBlank(dto.addressCountry, "The country cannot be blank");
-		ArgumentChecks.isNotBlank(dto.addressZipcode, "The zipcode cannot be blank");
+        ArgumentChecks.isNotBlank(dto.addressStreet, "The street cannot be blank");
+        ArgumentChecks.isNotBlank(dto.addressCity, "The city cannot be blank");
+        ArgumentChecks.isNotBlank(dto.addressCountry, "The country cannot be blank");
+        ArgumentChecks.isNotBlank(dto.addressZipcode, "The zipcode cannot be blank");
 
-		this.dto = dto;
-	}
+        this.dto = dto;
+    }
 
-	@Override
-	public Void execute() throws BusinessException {
-		Optional<Client> oc = clientRepo.findById(dto.id);
+    @Override
+    public Void execute() throws BusinessException {
+        Optional<Client> oc = clientRepo.findById(dto.id);
 
-		BusinessChecks.exists(oc, "The client does not exist");
+        BusinessChecks.exists(oc, "The client does not exist");
 
-		Client client = oc.get();
+        Client client = oc.get();
 
-		BusinessChecks.hasVersion(client.getVersion(), dto.version,
-				"The client has been updated by another transaction");
+        BusinessChecks.hasVersion(client.getVersion(), dto.version,
+            "The client has been updated by another transaction");
 
-		Nif newNif = new Nif(dto.nif);
+        Nif newNif = new Nif(dto.nif);
 
-		if (!client.getNif().equals(newNif)) {
-			BusinessChecks.doesNotExist(clientRepo.findByNif(newNif), "There is already a client with the same nif");
-		}
+        if (!client.getNif().equals(newNif)) {
+            BusinessChecks.doesNotExist(clientRepo.findByNif(newNif), "There is already a client with the same nif");
+        }
 
-		if (!client.getNif().equals(newNif)) {
-			client.setNif(newNif);
-		}
+        if (!client.getNif().equals(newNif)) {
+            client.setNif(newNif);
+        }
 
-		client.setFullName(new FullName(dto.name, dto.surname));
-		client.setEmail(new Email(dto.email));
-		client.setPhone(new PhoneNumber(dto.phone));
-		client.setAddress(new Address(dto.addressStreet, dto.addressCity, dto.addressCountry, dto.addressZipcode));
+        client.setFullName(new FullName(dto.name, dto.surname));
+        client.setEmail(new Email(dto.email));
+        client.setPhone(new PhoneNumber(dto.phone));
+        client.setAddress(new Address(dto.addressStreet, dto.addressCity, dto.addressCountry, dto.addressZipcode));
 
-		client.updatedNow();
+        client.updatedNow();
 
-		return null;
-	}
+        return null;
+    }
 }

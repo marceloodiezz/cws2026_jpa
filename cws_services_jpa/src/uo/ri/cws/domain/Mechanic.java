@@ -11,80 +11,80 @@ import uo.ri.util.assertion.ArgumentChecks;
 
 public class Mechanic extends BaseEntity {
 
-	// Natural attributes
-	private Nif nif;
-	private FullName fullName;
+    // Natural attributes
+    private Nif nif;
+    private FullName fullName;
 
-	// Accidental attributes
-	private Set<WorkOrder> assigned = new HashSet<>();
+    // Accidental attributes
+    private Set<WorkOrder> assigned = new HashSet<>();
 
-	Mechanic() {
-	}
+    Mechanic() {
+    }
 
-	public Mechanic(Nif nif) {
-		// Delegate to the other constructor with meaningful default values for the
-		// fullname
-		this(nif, new FullName("No name", "No surname"));
-	}
+    public Mechanic(Nif nif) {
+        // Delegate to the other constructor with meaningful default values for the
+        // fullname
+        this(nif, new FullName("No name", "No surname"));
+    }
 
-	public Mechanic(Nif nif, FullName name) {
-		ArgumentChecks.isNotNull(nif);
-		ArgumentChecks.isNotNull(name);
+    public Mechanic(Nif nif, FullName name) {
+        ArgumentChecks.isNotNull(nif);
+        ArgumentChecks.isNotNull(name);
 
-		this.nif = nif;
-		this.fullName = name;
-	}
+        this.nif = nif;
+        this.fullName = name;
+    }
 
-	// ---- Setters (optional, controlled) ----
+    // ---- Setters (optional, controlled) ----
 
-	public void setFullName(FullName name) {
-		ArgumentChecks.isNotNull(name);
-		this.fullName = name;
-	}
+    public void setFullName(FullName name) {
+        ArgumentChecks.isNotNull(name);
+        this.fullName = name;
+    }
 
-	public void setNif(Nif nif) {
-		ArgumentChecks.isNotNull(nif);
-		this.nif = nif;
-	}
+    public void setNif(Nif nif) {
+        ArgumentChecks.isNotNull(nif);
+        this.nif = nif;
+    }
 
-	// ---- Associations helpers ----
+    // ---- Associations helpers ----
 
-	Set<WorkOrder> _getAssigned() {
-		return assigned;
-	}
+    Set<WorkOrder> _getAssigned() {
+        return assigned;
+    }
 
-	public Set<WorkOrder> getAssigned() {
-		return new HashSet<>(assigned);
-	}
+    public Set<WorkOrder> getAssigned() {
+        return new HashSet<>(assigned);
+    }
 
-	public Nif getNif() {
-		return nif;
-	}
+    public Nif getNif() {
+        return nif;
+    }
 
-	public FullName getFullName() {
-		return fullName;
-	}
+    public FullName getFullName() {
+        return fullName;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(nif);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(nif);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Mechanic other = (Mechanic) obj;
-		return Objects.equals(nif, other.nif);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Mechanic other = (Mechanic) obj;
+        return Objects.equals(nif, other.nif);
+    }
 
-	@Override
-	public String toString() {
-		return "Mechanic [nif=" + nif + ", fullName=" + fullName + "]";
-	}
+    @Override
+    public String toString() {
+        return "Mechanic [nif=" + nif + ", fullName=" + fullName + "]";
+    }
 
 }
