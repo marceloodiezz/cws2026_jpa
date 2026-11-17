@@ -25,7 +25,7 @@ public class GenerateWorkOrderVouchers implements Command<Integer> {
         List<Client> clients = clientRepo.findWithWorkOrdersUnusedForVoucher(3);
 
         for (Client client : clients) {
-            while (client.getWorkOrdersAvailableForVoucher20().size() >= 3) {
+            while (client.isEligibleForVoucher20()) {
                 Voucher voucher = new Voucher(VoucherCode.generate(), "Por tres órdenes de trabajo", Money.of("20.00"));
 
                 Associations.Holds.link(client, voucher);

@@ -215,6 +215,10 @@ public class Client extends BaseEntity {
         return available;
     }
 
+    public boolean isEligibleForVoucher20() {
+        return getWorkOrdersAvailableForVoucher20().size() >= 3;
+    }
+
     public void markThreeWorkOrdersAsUsedForVoucher20() {
         List<WorkOrder> available = getWorkOrdersAvailableForVoucher20();
 
