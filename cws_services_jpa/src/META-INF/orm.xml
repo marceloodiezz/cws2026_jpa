@@ -310,6 +310,9 @@
 	
 	        <basic name="make" />
 	        <basic name="model" />
+	        <basic name="registeredDate">
+	        	<column name="REGISTRATION_DATE" />
+	        </basic>
 	
 	        <many-to-one name="vehicleType" />
 	        <many-to-one name="client" />

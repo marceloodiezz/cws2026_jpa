@@ -30,7 +30,7 @@ public class ScenarioWFnI3 {
 	@Given("[W.FnI.3] a client registered with a vehicle and a list of several approved workorders")
     public void givenClientWithVehicleAndSeveralApprovedWorkorders() {
 		client = DbFixtures.aClient();
-    	approvedWorkOrders = DbFixtures.someWorkOrdersApprovedWithVehicleForClient(client.id);
+    	approvedWorkOrders = DbFixtures.someWorkordersApprovedWithVehicleForClient(client.id);
     	// Get vehicle ID from the first approved workorder
     	vehicleId = approvedWorkOrders.get(0).vehicle_Id;
     }

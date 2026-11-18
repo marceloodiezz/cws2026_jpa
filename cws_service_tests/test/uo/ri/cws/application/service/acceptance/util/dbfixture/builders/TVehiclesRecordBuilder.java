@@ -1,16 +1,16 @@
 package uo.ri.cws.application.service.acceptance.util.dbfixture.builders;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.processing.Generated;
 
 import uo.ri.cws.application.service.acceptance.util.dbfixture.records.TVehiclesRecord;
+import uo.ri.util.random.Random;
 
 @Generated("LLM")
 public class TVehiclesRecordBuilder {
-	private static final AtomicInteger PLATE_SEQUENCE = new AtomicInteger();
 
 	private TVehiclesRecord record = createDefaultRecord();
 
@@ -54,6 +54,11 @@ public class TVehiclesRecordBuilder {
 		return this;
 	}
 
+	public TVehiclesRecordBuilder withRegistrationDate(Date regDate) {
+		record.registration_date = regDate;
+		return this;
+	}
+
 	public TVehiclesRecordBuilder forClientId(String clientId) {
 		record.client_Id = clientId;
 		return this;
@@ -75,11 +80,13 @@ public class TVehiclesRecordBuilder {
 		defaultRecord.entityState = "ENABLED";
 		defaultRecord.make = "Default Make " + defaultRecord.id.substring(0, 4);
 		defaultRecord.model = "Default Model " + defaultRecord.id.substring(0, 4);
-		defaultRecord.licensePlate = String.format("%04dBBB", PLATE_SEQUENCE.getAndIncrement());
+		defaultRecord.licensePlate = Random.inRange(1000, 9999) + "BCD";
 		defaultRecord.updatedAt = new Timestamp(System.currentTimeMillis());
+		defaultRecord.registration_date = new Date(System.currentTimeMillis());
 		defaultRecord.version = 1L;
 		defaultRecord.client_Id = null;
 		defaultRecord.vehicleType_Id = null;
 		return defaultRecord;
 	}
+
 }

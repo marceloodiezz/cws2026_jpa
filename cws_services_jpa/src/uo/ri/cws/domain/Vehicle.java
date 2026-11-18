@@ -1,5 +1,6 @@
 package uo.ri.cws.domain;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -15,6 +16,7 @@ public class Vehicle extends BaseEntity {
     private LicensePlate licensePlate;
     private String make;
     private String model;
+    private LocalDate registeredDate;
 
     // Accidental attributes
     private VehicleType vehicleType;
@@ -41,6 +43,18 @@ public class Vehicle extends BaseEntity {
         this.make = make;
         this.model = model;
     }
+    
+    public Vehicle(LicensePlate plateNumber, String make, String model, LocalDate registeredDate) {
+        ArgumentChecks.isNotNull(plateNumber, "plate number cannot be null");
+        ArgumentChecks.isNotBlank(make, "make cannot be null or blank");
+        ArgumentChecks.isNotBlank(model, "model cannot be null or blank");
+        ArgumentChecks.isNotNull(registeredDate, "registeredDate cannot be null");
+
+        this.licensePlate = plateNumber;
+        this.make = make;
+        this.model = model;
+        this.registeredDate = registeredDate;
+    }
 
     public Money getPricePerHour() {
         return vehicleType.getPricePerHour(); // VehicleType must return Money
@@ -56,6 +70,10 @@ public class Vehicle extends BaseEntity {
 
     public String getModel() {
         return model;
+    }
+    
+    public LocalDate getRegisteredDate() {
+    	return registeredDate;
     }
 
     public Client getClient() {

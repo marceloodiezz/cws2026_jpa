@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
-import uo.ri.cws.application.service.invoice.InvoicingService.InvoiceDto;
 import uo.ri.cws.application.service.acceptance.util.dbfixture.records.TWorkOrdersRecord;
 import uo.ri.cws.application.service.acceptance.util.dtobuilders.InvoiceDtoBuilder;
+import uo.ri.cws.application.service.invoice.InvoicingService.InvoiceDto;
 
 public class InvoiceHelper {
 

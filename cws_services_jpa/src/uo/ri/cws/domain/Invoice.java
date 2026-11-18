@@ -121,8 +121,7 @@ public class Invoice extends BaseEntity {
         return total;
     }
 
-    // ------------------ Association helpers (package-private)
-    // --------------------------
+    // ------------------ Association helpers (package-private) --------------------------
 
     Set<WorkOrder> _getWorkOrders() {
         return workOrders;
@@ -230,7 +229,15 @@ public class Invoice extends BaseEntity {
         Money.MoneyCalculator calculator = Money.calc();
 
         for (WorkOrder workOrder : workOrders) {
-            calculator.add(workOrder.getAmount());
+        	Money amount = workOrder.getAmount();
+        	LocalDate registeredDate = workOrder.getVehicle().getRegisteredDate();
+        	
+        	if (registeredDate != null && registeredDate.isBefore(date.minusYears(30))) {
+        		calculator.add(Money.calc(amount).times(1.5).toMoneyRoundedToCents());
+        	}
+        	else {
+        		calculator.add(amount);
+        	}
         }
 
         this.subtotal = calculator.toMoneyRoundedToCents();

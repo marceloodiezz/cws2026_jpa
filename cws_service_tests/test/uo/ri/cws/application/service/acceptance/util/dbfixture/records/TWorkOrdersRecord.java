@@ -20,7 +20,6 @@ public class TWorkOrdersRecord {
     public BigDecimal total_amount;
     
     public String state;
-    public boolean usedForVoucher;
 
     public String invoice_Id;
     public String mechanic_Id;

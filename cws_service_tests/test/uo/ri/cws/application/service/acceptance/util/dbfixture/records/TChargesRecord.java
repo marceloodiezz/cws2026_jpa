@@ -11,9 +11,9 @@ public class TChargesRecord {
     public Timestamp createdAt;
     public Timestamp updatedAt;
     public String entityState;
-    public long version;
+    public Long version;
     
-    public BigDecimal charge;
+    public BigDecimal amount;
     public String invoice_Id;
     public String paymentMean_Id;
 }

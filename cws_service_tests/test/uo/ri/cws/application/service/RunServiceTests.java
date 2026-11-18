@@ -21,10 +21,10 @@ import io.cucumber.junit.platform.engine.Constants;
  */
 @IncludeEngines({ "cucumber", "junit-jupiter" })
 
-// --- Acceptance/Cucumber tests ---
+// Acceptante/Cucumber tests
 @SelectClasspathResource("uo/ri/cws/application/service/acceptance")
 
-// --- Robustness/JUnit tests ---
+// Robusteness/JUnit tests
 @SelectPackages("uo.ri.cws.application.service.robustness")
 
 @ConfigurationParameter(

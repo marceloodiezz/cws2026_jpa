@@ -11,7 +11,7 @@ public class TSparePartsRecord {
     public Timestamp createdAt;
     public String entityState;
     public Timestamp updatedAt;
-    public long version;
+    public Long version;
 
     public String code;
     public String description;

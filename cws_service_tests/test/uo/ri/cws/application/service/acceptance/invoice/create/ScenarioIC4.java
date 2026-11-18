@@ -24,7 +24,7 @@ public class ScenarioIC4 {
 
     @Given("[I.C.4] a client registered with a vehicle and a list of several finished workorder")
     public void givenClientWithVehicleAndFinishedWorkorders() {
-        workOrders = DbFixtures.someWorkOrdersFinishedWithVehicleAndClient();
+        workOrders = DbFixtures.someWorkordersFinishedWithVehicleAndClient();
         workOrderIds = new ArrayList<>(workOrders.stream().map(wo -> wo.id).toList());
     }
 
